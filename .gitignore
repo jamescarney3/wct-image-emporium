@@ -17,6 +17,9 @@
 !/log/.keep
 !/tmp/.keep
 
+# Ignore .env and keep keys secret
+.env
+
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep
