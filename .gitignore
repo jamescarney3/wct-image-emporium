@@ -20,6 +20,9 @@
 # Ignore .env and keep keys secret
 .env
 
+# Ignore admins list, keep our UIDs from the prying eyes of the CIA, FBI, Clintons, etc
+.admins.yml
+
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep
