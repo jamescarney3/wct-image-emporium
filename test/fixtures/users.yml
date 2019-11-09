@@ -1,0 +1,4 @@
+invalid_user: {}
+
+valid_user:
+  uid: <%= ADMIN_IDS.empty? ? 42069 : ADMIN_IDS.first %>

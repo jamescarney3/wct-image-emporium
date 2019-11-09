@@ -10,15 +10,14 @@ class User < ApplicationRecord
     self.session_token
   end
 
-  # find or create user from Twitter auth
-  def self.from_twitter(auth)
-    where(auth.slice('uid')).first || create_from_twitter(auth)
+  # find or create a user from a twitter uid
+  def self.from_uid(uid)
+    where uid: uid || create_from_uid(uid)
   end
 
-  # get uid from auth data and create a new user if it's whitelisted
-  def self.create_from_twitter(auth)
-    uid = auth.slice('uid')
-    create(auth.slice('uid')) if ADMIN_IDS.include? uid
+  # create a user with a a twitter uid
+  def self.create_from_uid(uid)
+    create(uid: uid) if ADMIN_IDS.include? uid
   end
 
   def self.generate_session_token
@@ -35,8 +34,8 @@ class User < ApplicationRecord
 
   private
 
-  # true if the instance has one, generate one if not
-  def ensure_session_token
-    self.session_token ||= User.generate_session_token
-  end
+    # true if the instance has one, generate one if not
+    def ensure_session_token
+      self.session_token ||= User.generate_session_token
+    end
 end
