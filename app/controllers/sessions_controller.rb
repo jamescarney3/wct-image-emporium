@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
   def create
-    @user = User.from_twitter(request.env['omniauth.auth'])
+    # @user = User.from_twitter(request.env['omniauth.auth'])
+    @user = User.from_uid request.env['omniauth.auth'].uid
     log_in! @user
     redirect_to root_url authenticated: true
   end

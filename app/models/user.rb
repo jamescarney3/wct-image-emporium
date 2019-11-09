@@ -12,7 +12,7 @@ class User < ApplicationRecord
 
   # find or create a user from a twitter uid
   def self.from_uid(uid)
-    where uid: uid || create_from_uid(uid)
+    where(uid: uid).first || create_from_uid(uid)
   end
 
   # create a user with a a twitter uid
