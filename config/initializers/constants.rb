@@ -5,7 +5,7 @@ require 'yaml'
 # wrong make it an empty array and we just won't be able
 # to sign anyone in
 begin
-  ADMIN_IDS = YAML.load File.read '.admins.yml'
+  ADMIN_IDS = (YAML.load File.read '.admins.yml').map(&:to_s)
 rescue
   ADMIN_IDS = []
   puts <<-MESSAGE

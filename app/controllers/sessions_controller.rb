@@ -1,9 +1,12 @@
 class SessionsController < ApplicationController
   def create
-    # @user = User.from_twitter(request.env['omniauth.auth'])
     @user = User.from_uid request.env['omniauth.auth'].uid
-    log_in! @user
-    redirect_to root_url authenticated: true
+    if @user.nil?
+      redirect_to :unauthorized
+    else
+      log_in! @user
+      redirect_to :admin
+    end
   end
 
   # temporary response behavior until this is better planned
@@ -19,6 +22,6 @@ class SessionsController < ApplicationController
   # temporary response behavior until this is better planned
   def destroy
     log_out! if !current_user.nil?
-    render json: {}
+    redirect_to root_url
   end
 end
