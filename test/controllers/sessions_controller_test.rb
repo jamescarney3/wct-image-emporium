@@ -12,7 +12,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       uid: uid,
     })
 
-    get oauth_callback_url(provider: 'twitter')
+    get auth_callback_url(provider: 'twitter')
     assert_redirected_to :admin
   end
 
@@ -27,7 +27,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       uid: uid,
     })
 
-    get oauth_callback_path(provider: 'twitter')
+    get auth_callback_path(provider: 'twitter')
     assert_redirected_to :unauthorized
   end
 
@@ -35,8 +35,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     failure_message = :invalid_credentials
     OmniAuth.config.mock_auth[:twitter] = failure_message
 
-    silence_omniauth { get oauth_callback_path(provider: 'twitter') }
-    assert_redirected_to oauth_failure_path(message: failure_message, strategy: 'twitter')
+    silence_omniauth { get auth_callback_path(provider: 'twitter') }
+    assert_redirected_to auth_failure_path(message: failure_message, strategy: 'twitter')
   end
 
   test 'should sign in and return an existing user by cookie session token' do
@@ -45,7 +45,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     user = User.create(uid: uid)
     cookies['session_token'] = user.session_token
 
-    get sessions_path
+    get auth_sessions_path
     assert_equal JSON.parse(@response.body)['uid'], user.uid
   end
 
@@ -55,7 +55,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     user = User.create(uid: uid)
     cookies['session_token'] = user.session_token + 'smarf'
 
-    get sessions_path
+    get auth_sessions_path
     assert JSON.parse(@response.body).empty?
   end
 end
