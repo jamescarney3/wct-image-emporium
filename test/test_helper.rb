@@ -10,4 +10,11 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def silence_omniauth
+    previous_logger = OmniAuth.config.logger
+    OmniAuth.config.logger = Logger.new("/dev/null")
+    yield
+  ensure
+    OmniAuth.config.logger = previous_logger
+  end
 end
