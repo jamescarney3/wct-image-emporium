@@ -1,0 +1,8 @@
+valid_image:
+  title: 'all_of_australia'
+  admin: valid_user
+# is this legal?
+# asset: < %= File.open('path/to/hoopball') % >
+
+no_admin_image:
+  title: 'house_of_bayne'
