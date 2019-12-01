@@ -1,0 +1,6 @@
+valid_image:
+  title: 'all_of_australia'
+  admin: valid_user
+
+no_admin_image:
+  title: 'house_of_bayne'
