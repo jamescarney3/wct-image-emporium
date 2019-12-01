@@ -29,10 +29,8 @@ gode with questions/concerns.
 
 here's what you'll need to join the revolution:
 
-```
-ruby v2.5.0 or newer
-~~node v6.0.0 or newer~~ pending frontend implementation
-```
+- ruby v2.5.0 or newer
+- ~~node v6.0.0 or newer~~ pending frontend implementation
 
 that's about it - whole shebang is intended to run on webpack/react & ruby on
 rails
@@ -103,6 +101,7 @@ that runs both (more? all?) test suites in the project.
 chill out, we'll get here when we get here
 
 ## Built With
+a non-exhaustive list:
 
 * [ruby on rails][rails-url] - server side persistence and json api
 * [react][react-url] - client side application
@@ -111,7 +110,7 @@ chill out, we'll get here when we get here
 <br><!-- rails ships with webpacker now but shakacode remains on my pay no mind list -->
 * [minitest][minitest-url] - back end testing
 * [jest][jest-url] - front end testing
-<br>
+<br><!-- come one github format this right -->
 * [rubocop][rubocop-url] - nonlethal back end style enforcement
 * [tslint][tslint-url] - possibly lethal front end style enforcement
 
