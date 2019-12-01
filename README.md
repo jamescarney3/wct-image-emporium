@@ -15,7 +15,7 @@ rules (more like guidelines, suggestions perhaps):
 
 ## Getting Started
 
-clone this badboy and start hacking... collaborators are always welcome! you'll
+clone/fork this badboy and start hacking... collaborators are always welcome! you'll
 need some keys, though. official recommendation/decree is that you should
 probably set up your own resources for local development, since the application
 shouldn't depend necessarily on any one set of credentials if it's set up right
@@ -25,31 +25,68 @@ to all, even wetbuckets. if anything in the next few sections on how to get up &
 running isn't clear, don't hesitate to beseech your local friendly ghost of john
 gode with questions/concerns.
 
-<!-- ### Prerequisites
+### Prerequisites
 
-What things you need to install the software and how to install them
+here's what you'll need to join the revolution:
 
 ```
-Give examples
+ruby v2.5.0 or newer
+~~node v6.0.0 or newer~~ pending frontend implementation
 ```
+
+that's about it - whole shebang is intended to run on webpack/react & ruby on
+rails
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+1. clone the repo:
+`git clone git@github.com:jamescarney3/wct-image-emporium.git`
+or
+`git clone https://github.com/jamescarney3/wct-image-emporium.git`
 
-Say what the step will be
+2. navigate to project directory and install ruby dependencies:
+`bundle install`
 
+3. add a `.env` file to the top level of the project directory with credentials
+for a twitter developer account and an aws user role & s3 bucket configured for
+full read/write access:
 ```
-Give the example
+# .env
+
+export TWITTER_KEY=<twitter key>
+export TWITTER_SECRET=<twitter secret>
+
+export AWS_ACCESS_KEY_ID=<aws access key id>
+export AWS_SECRET_ACCESS_KEY=<ok you get the idea>
+export S3_BUCKET_ID=<name of your bucket>
+export S3_REGION=<probably us-east-1 but you're the boss now>
 ```
 
-And repeat
-
+4. add a `.admins.yml` file to the top level of the project directory - this
+should be a yaml array of twitter user ids (not @s, not handles) that rails
+will use to whitelist users for account creation. can't have just anyone logging
+in off the street or utah jazz twitter and giving all the pictures 'rudy gobert
+dpoy' tags, no, cannot have that<br>
+anyway it should look like this:
 ```
-until finished
+# .admins.yml
+
+- <your twitter uid>
+- <my twitter uid>
+- <frasier's twitter uid>
+- <etc>
 ```
 
-End with an example of getting some data out of the system or using it for a little demo -->
+5. fire up a local instance by running `rails s` or the rails console by running
+`rails c`. run the tests if you want. <br> at some point this part is gonna get
+more complicated when there's a frontend and some fancylad startup scripts that
+turn everything on at the same time, but for now we're just gonna be thankful
+for what god has given us in her infinite wisdom
+
+6. (9) if any of that didn't work or seems bogus, contact me directly, stomping
+your little hooves, wailing and gnashing your teeth. please direct all other
+inquiries to press@joebiden.com
+
 
 ## Running the tests
 
@@ -57,29 +94,13 @@ End with an example of getting some data out of the system or using it for a lit
 run `rails test`
 
 *for later:*
-hope you like [jest][jest-link] because that's what we're using when we slap a
+hope you like [jest][jest-url] because that's what we're using when we slap a
 client side app on this old war wagon. there will probably be a bash script
 that runs both (more? all?) test suites in the project.
 
-<!-- ### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
 ## Deployment
 
-Add additional notes about how to deploy this on a live system -->
+chill out, we'll get here when we get here
 
 ## Built With
 
@@ -87,11 +108,10 @@ Add additional notes about how to deploy this on a live system -->
 * [react][react-url] - client side application
 * [typescript][typescript-url] - for client side type safety
 * [webpack][webpack-url] - for transpilation and dev serving
-<!-- rails ships with webpacker now but shakacode remains on my pay no mind list -->
-
+<br><!-- rails ships with webpacker now but shakacode remains on my pay no mind list -->
 * [minitest][minitest-url] - back end testing
 * [jest][jest-url] - front end testing
-
+<br>
 * [rubocop][rubocop-url] - nonlethal back end style enforcement
 * [tslint][tslint-url] - possibly lethal front end style enforcement
 
@@ -101,10 +121,11 @@ Add additional notes about how to deploy this on a live system -->
 you're invited to peruse [CONTRIBUTING.md][contributing-url] for details on the
 rules of engagement, and how to make pull requests to the project
 
-<!-- ## Versioning
+## Versioning
 
-we use [SemVer](http://semver.org/) for versioning. For the versions available,
-see the [tags on this repository](https://github.com/your/project/tags). -->
+it's in, like, pre-alpha or whatever right now - eagerly looking forward to
+deciding on how versioning will work and bumping the version to 0.0.69 or some
+such denotation
 
 ## Authors
 
