@@ -1,4 +1,13 @@
 require 'test_helper'
+require 'fileutils'
+
+# tests for successful initialization with an image asset and persistence if
+# and associated admin record is destroyed aren't implemented here even though
+# it seems like they could be because those functionalities are ultimately the
+# responsibilities of ActiveStorage and the User model unit tests respectively
+
+# see additional notes on what ActiveStorag is doin under the hood here:
+# https://evilmartians.com/chronicles/rails-5-2-active-storage-and-beyond
 
 class ImageTest < ActiveSupport::TestCase
   def setup
@@ -17,23 +26,11 @@ class ImageTest < ActiveSupport::TestCase
     assert_not no_title_image.valid?
   end
 
-  test 'can initialize with an active storage record' do
-    # see fixtures/images, if not implement here
-    skip
-  end
-
   test 'can attach an active storage record' do
-    # @valid_image.asset.attach(io: File('<some location in test/fixtures/files?>'))
-    # file = <read the same file>
-    # assert <they match>
-    skip
+    file = file_fixture('hoopball.jpg')
+    @valid_image.asset.attach(io: file.open, filename: 'HOOPBALL.jpg')
+    @valid_image.asset.open do |attached_file|
+      assert FileUtils.compare_file(file, attached_file)
+    end
   end
-
-  # THIS BELONGS ON THE USER MODEL
-  # test 'persists if associated admin user record is deleted' do
-  #   @valid_image.admin.destroy
-  #   persisted_image = Image.find(@valid_image.id)
-  #
-  #   assert_not persisted_image.nil?
-  # end
 end
