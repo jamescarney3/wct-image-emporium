@@ -160,4 +160,4 @@ for details... or don't, tbh you should do what you want
 [contributors-url]: https://github.com/jamescarney3/wct-image-emporium/graphs/contributors "they're all just out of frame, laughing too"
 
 [contributing-url]: CONTRIBUTING.md "more code for the code hole"
-[license-url]: LICENSE.md "get outta my face kid"
+[license-url]: LICENSE.txt "get outta my face kid"
