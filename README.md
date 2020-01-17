@@ -156,7 +156,7 @@ for details... or don't, tbh you should do what you want
 [rubocop-url]: https://github.com/rubocop-hq/rubocop "sole exception to the no cops rule"
 [tslint-url]: https://palantir.github.io/tslint/ "compile bofades"
 
-[gode-gh-url]: https://github.com/jamescarney3 "it's ya boi!"
+[gode-gh-url]: https://github.com/jamescarney3 "it's your boy"
 [contributors-url]: https://github.com/jamescarney3/wct-image-emporium/graphs/contributors "they're all just out of frame, laughing too"
 
 [contributing-url]: CONTRIBUTING.md "more code for the code hole"
