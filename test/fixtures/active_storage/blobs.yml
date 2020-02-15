@@ -1,0 +1,8 @@
+hoopball_blob:
+  id: 1
+  key: '12345678'
+  filename: 'hoopball.jpg'
+  content_type: 'image/png'
+  metadata: nil
+  byte_size: 2000
+  checksum: "123456789012345678901234"

@@ -1,0 +1,5 @@
+hoopball_attachment:
+  name: hoopball
+  record_type: Image
+  record: valid_image
+  blob: hoopball_blob
