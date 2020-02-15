@@ -6,7 +6,7 @@ require 'fileutils'
 # functionalities are ultimately the responsibilities the User model unit
 # tests
 
-# see additional notes on what ActiveStorag is doing under the hood here:
+# see additional notes on what ActiveStorage is doing under the hood here:
 # https://evilmartians.com/chronicles/rails-5-2-active-storage-and-beyond
 
 class ImageTest < ActiveSupport::TestCase
@@ -14,17 +14,26 @@ class ImageTest < ActiveSupport::TestCase
     @valid_image = images :valid_image
     @no_admin_image = images :no_admin_image
     @valid_user = users :valid_user
+
+    @valid_image.asset.attach(io: file_fixture('hoopball.jpg').open, filename: 'HOOPBALL.jpg')
+    @no_admin_image.asset.attach(io: file_fixture('hoopball.jpg').open, filename: 'HOOPBALL.jpg')
   end
 
   test 'instance_should_validate' do
     assert @valid_image.valid?
     assert @no_admin_image.valid?
 
-    duplicate_title_image = Image.new(title: @valid_image.title)
+
+    asset = { io: file_fixture('hoopball.jpg').open, filename: 'HOOPBALL.jpg' }
+
+    duplicate_title_image = Image.new(title: @valid_image.title, asset: asset)
     assert_not duplicate_title_image.valid?
 
-    no_title_image = Image.new
+    no_title_image = Image.new(asset: asset)
     assert_not no_title_image.valid?
+
+    no_asset_image = Image.new(title: 'kentavious_balled_well_nope.jpg')
+    assert_not no_asset_image.valid?
   end
 
   test 'can initialize with attached image asset' do

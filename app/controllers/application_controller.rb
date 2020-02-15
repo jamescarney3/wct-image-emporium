@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   def current_user
+    return nil if not cookies[:session_token]
     User.find_by session_token: cookies[:session_token]
   end
 
@@ -12,10 +13,10 @@ class ApplicationController < ActionController::Base
   end
 
   def log_out!
-    current_user.reset_token
+    current_user.reset_token!
   end
 
   def require_logged_in
-    render json: { errors: 'user not logged in' }, status: :unauthorized if current_user.nil?
+    render json: { errors: 'user not logged in' }, status: :unauthorized if not logged_in?
   end
 end

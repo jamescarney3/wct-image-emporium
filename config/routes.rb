@@ -12,6 +12,10 @@ Rails.application.routes.draw do
     get 'failure', to: 'static_pages#root', as: :failure
   end
 
+  namespace :api, defaults: { format: :json } do
+    resources :images, only: [:show, :create]
+  end
+
   # the following routes are intended specified to serve as redirect targets
   # and correspond to paths intended to have semantic meanings in the client
   # side router
