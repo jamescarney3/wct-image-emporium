@@ -56,4 +56,10 @@ class ImageTest < ActiveSupport::TestCase
       assert FileUtils.compare_file(file, attached_file)
     end
   end
+
+  # make sure we don't leave any assets in tmp/storage after test runs
+  def after_teardown
+    super
+    FileUtils.rm_rf(Rails.root.join('tmp', 'storage'))
+  end
 end
