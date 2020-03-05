@@ -8,16 +8,32 @@ class TagTest < ActiveSupport::TestCase
   end
 
   test 'instance should validate' do
+    # validate valid fixutre instances, no playin
     assert @valid_tag.valid?
     assert @valid_tag_no_admin.valid?
 
-    assert_not Tag.create(label: 'Smarf', value: 'smarf').valid?
+    # use this as base case for constructor hash args, all valid, omit
+    # undesired k/v pairs with omit helper
+    tag_args = {
+      value: 'smarf',
+      label: 'Smarf',
+      admin: @valid_user,
+    }
 
-    assert_not Tag.new(label: @valid_tag.label, value: 'shaqtin').valid?
-    assert_not Tag.new(label: 'Shaqtin', value: @valid_tag.value).valid?
-    assert_not Tag.new(label: 'Smarf').valid?
-    assert_not Tag.new(value: 'smarf').valid?
-    assert_not Tag.new(label: 'Smarf', value: '').valid?
-    assert_not Tag.new(label: '', value: 'smarf').valid?
+    # field validation presence bad cases
+    assert_not Tag.new(omit(tag_args, :value)).valid?
+    assert_not Tag.new(replace(tag_args, value: '')).valid?
+
+    assert_not Tag.new(omit(tag_args, :label)).valid?
+    assert_not Tag.new(replace(tag_args, label: '')).valid?
+
+    # field validation uniqueness bad cases
+    assert_not Tag.new(replace(tag_args, value: @valid_tag.value)).valid?
+    assert_not Tag.new(replace(tag_args, label: @valid_tag.label)).valid?
+  end
+
+  test 'instance should validate admin on create only' do
+    # check instance after new and after create
+    assert_not Tag.create(label: 'Smarf', value: 'smarf').valid?
   end
 end
