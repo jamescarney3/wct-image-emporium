@@ -1,0 +1,8 @@
+valid_tag:
+  label: 'Tall Tatum'
+  value: 'talltatum'
+  admin: valid_user
+
+valid_tag_no_admin:
+  label: 'Lil Buster'
+  value: 'lilbuster'
