@@ -33,19 +33,19 @@ ActiveRecord::Schema.define(version: 2020_03_05_021953) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "image_tags", force: :cascade do |t|
+    t.integer "image_id", null: false
+    t.integer "tag_id", null: false
+    t.index ["image_id"], name: "index_image_tags_on_image_id"
+    t.index ["tag_id"], name: "index_image_tags_on_tag_id"
+  end
+
   create_table "images", force: :cascade do |t|
     t.integer "user_id"
     t.string "title", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_images_on_user_id"
-  end
-
-  create_table "images_tags", force: :cascade do |t|
-    t.integer "image_id", null: false
-    t.integer "tag_id", null: false
-    t.index ["image_id"], name: "index_images_tags_on_image_id"
-    t.index ["tag_id"], name: "index_images_tags_on_tag_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -65,8 +65,8 @@ ActiveRecord::Schema.define(version: 2020_03_05_021953) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "image_tags", "images"
+  add_foreign_key "image_tags", "tags"
   add_foreign_key "images", "users"
-  add_foreign_key "images_tags", "images"
-  add_foreign_key "images_tags", "tags"
   add_foreign_key "tags", "users"
 end
