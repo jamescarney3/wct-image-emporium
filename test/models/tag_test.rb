@@ -11,6 +11,8 @@ class TagTest < ActiveSupport::TestCase
     assert @valid_tag.valid?
     assert @valid_tag_no_admin.valid?
 
+    assert_not Tag.create(label: 'Smarf', value: 'smarf').valid?
+
     assert_not Tag.new(label: @valid_tag.label, value: 'shaqtin').valid?
     assert_not Tag.new(label: 'Shaqtin', value: @valid_tag.value).valid?
     assert_not Tag.new(label: 'Smarf').valid?
