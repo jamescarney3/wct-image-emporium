@@ -27,6 +27,8 @@ class TagTest < ActiveSupport::TestCase
     assert_not Tag.new(omit(tag_args, :label)).valid?
     assert_not Tag.new(replace(tag_args, label: '')).valid?
 
+    assert_not Tag.new(omit(tag_args, :admin)).valid?
+
     # field validation uniqueness bad cases
     assert_not Tag.new(replace(tag_args, value: @valid_tag.value)).valid?
     assert_not Tag.new(replace(tag_args, label: @valid_tag.label)).valid?
