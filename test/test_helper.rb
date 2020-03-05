@@ -18,6 +18,11 @@ class ActiveSupport::TestCase
     OmniAuth.config.logger = previous_logger
   end
 
+  # return a new hash with k/v pairs omitted where they match collected symbol args
+  def omit(hash, *keys)
+    hash.select { |k| not keys.include?(k) }
+  end
+
   # need to log in a user? log in the user with this
   def log_in!(user)
     cookies[:session_token] = user.reset_token!
