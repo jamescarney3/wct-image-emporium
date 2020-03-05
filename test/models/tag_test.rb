@@ -33,7 +33,8 @@ class TagTest < ActiveSupport::TestCase
   end
 
   test 'instance should validate admin on create only' do
-    # check instance after new and after create
-    assert_not Tag.create(label: 'Smarf', value: 'smarf').valid?
+    tag = Tag.new(label: 'Smarf', value: 'smarf')
+    assert tag.valid?(:new)
+    assert_not tag.valid?(:create)
   end
 end
