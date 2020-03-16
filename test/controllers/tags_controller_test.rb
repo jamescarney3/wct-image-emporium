@@ -5,6 +5,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     @valid_user = users :valid_user
     @alternate_valid_user = users :alternate_valid_user
     @valid_tag = tags :valid_tag
+    @alternate_valid_tag = tags :alternate_valid_tag
     @valid_tag_no_admin = tags :valid_tag_no_admin
   end
 
@@ -116,5 +117,59 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     delete api_tag_url(tag_id)
     assert_equal Tag.count, prev_count
     assert_response 404
+  end
+
+  test 'edit tag belonging to current user' do
+    log_in! @valid_user
+    get edit_api_tag_url(@valid_tag.id)
+
+    assert_equal @response.body, filter_attrs(@valid_tag).to_json
+    assert_response 200
+  end
+
+  test 'edit tag belonging to no user' do
+    log_in! @valid_user
+    get edit_api_tag_url(@valid_tag_no_admin)
+
+    assert_equal @response.body, filter_attrs(@valid_tag_no_admin).to_json
+    assert_response 200
+  end
+
+  test 'edit tag belonging to another user' do
+    log_in! @valid_user
+    get edit_api_tag_url(@alternate_valid_tag.id)
+
+    assert_response 403
+  end
+
+  test 'edit nonexistent tag' do
+    log_in! @valid_user
+    tag_id = rand(42069)
+    until not tags.pluck(:id).include? tag_id do
+      tag_id = rand(42069)
+    end
+
+    get edit_api_tag_url(tag_id)
+    assert_response 404
+  end
+
+  test 'update tag belonging to current user with valid params' do
+
+  end
+
+  test 'update tag belongning to current user with invalid params' do
+
+  end
+
+  test 'update tag belonging to no user' do
+
+  end
+
+  test 'update tag belonging to another user' do
+
+  end
+
+  test 'update nonexistent tag' do
+
   end
 end

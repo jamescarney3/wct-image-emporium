@@ -3,6 +3,11 @@ valid_tag:
   value: 'talltatum'
   admin: valid_user
 
+alternate_valid_tag:
+  label: 'Erotic City'
+  value: 'erotciccity'
+  admin: alternate_valid_user
+
 valid_tag_no_admin:
   label: 'Lil Buster'
   value: 'lilbuster'
