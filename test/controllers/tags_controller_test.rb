@@ -51,4 +51,21 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     assert_equal Tag.count, prev_count
     assert_response 409
   end
+
+  test 'create tag with invalid params' do
+    log_in! @valid_user
+    tag_params = { value: 'bar', label: 'foo' }
+
+    post api_tags_url, params: { tag: omit(tag_params, :value) }
+    assert_response 422
+
+    post api_tags_url, params: { tag: omit(tag_params, :label) }
+    assert_response 422
+
+    post api_tags_url, params: { tag: replace(tag_params, { value: '' }) }
+    assert_response 422
+
+    post api_tags_url, params: { tag: replace(tag_params, { label: '' }) }
+    assert_response 422
+  end
 end
