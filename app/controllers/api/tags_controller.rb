@@ -1,4 +1,5 @@
 class Api::TagsController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   # only the pure shall call the plays
   before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
 
@@ -9,12 +10,12 @@ class Api::TagsController < ApplicationController
 
   # create a new tag record with parameters
   def create
-    @tag = Tag.new(tag_params)
+    @tag = Tag.new tag_params
     @tag.admin = current_user
     if @tag.save
       render json: helpers.filter_tag_attrs(@tag), status: 200
     elsif @tag.errors.messages[:value].include? 'has already been taken' # there's probably a better way to do this
-      render json: { error: '409 conflict, duplicate record' }, status: 409
+      render json: { error: '409 conflict with existing record' }, status: 409
     else
       render json: { error: '422 unprocessable entity' }, status: 422
     end
@@ -22,6 +23,15 @@ class Api::TagsController < ApplicationController
 
   # destroy a tag record
   def destroy
+    @tag = Tag.find params[:id]
+
+    if !@tag.admin.nil? && @tag.admin != current_user
+      render json: { error: '403 requested operation not permitted' }, status: 403
+    elsif @tag.delete
+      render json: helpers.filter_tag_attrs(@tag), status: 200
+    else
+      render json: { error: '400 bad request' }, status: 400
+    end
   end
 
   # fetch a tag record for updating
@@ -36,5 +46,9 @@ class Api::TagsController < ApplicationController
 
     def tag_params
       params.require(:tag).permit(:label, :value)
+    end
+
+    def record_not_found
+      render json: { errors: '404 tag record not found' }, status: 404
     end
 end
