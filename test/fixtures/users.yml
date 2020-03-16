@@ -2,3 +2,6 @@ invalid_user: {}
 
 valid_user:
   uid: <%= ADMIN_IDS.empty? ? 42069 : ADMIN_IDS.first %>
+
+alternate_valid_user:
+  uid: <%= ADMIN_IDS.empty? ? 666420 : ADMIN_IDS.first.to_i + 1 %>
