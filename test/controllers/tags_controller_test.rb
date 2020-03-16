@@ -5,22 +5,20 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     @valid_user = users :valid_user
   end
 
-  # filter tag attrs to align with intended json representation
-  # this logic might get smeared across the stack initially - it'll have to be
-  # implemented in jbuilder views which... maybe there's a cleaner way but I
-  # don't know what it is yet
-  filter_attrs = proc { |tag| tag.attributes.filter {  |k, v| ['id', 'label', 'value'].include? k } }
+  def filter_attrs(tag)
+    tag.attributes.filter {  |k, v| ['id', 'label', 'value'].include? k }
+  end
 
-  test '#index tags' do
+  test 'index tags' do
     get api_tags_url
 
-    tags = Tag.all.map(&filter_attrs)
+    tags = Tag.all.map(&method(:filter_attrs))
 
     assert_equal @response.body, tags.to_json
     assert_response :success
   end
 
-  test '#create new tag' do
+  test 'create new tag' do
     log_in! @valid_user
     prev_count = Tag.count
     tag_params = { value: 'foo', label: 'bar' }
@@ -31,11 +29,11 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     assert_equal new_tag.label, tag_params[:label]
     assert_equal new_tag.value, tag_params[:value]
 
-    assert_equal @response.body, filter_attrs.call(new_tag)
+    assert_equal @response.body, filter_attrs(new_tag).to_json
     assert_response :success
   end
 
-  test '#create tag without auth' do
+  test 'create tag without auth' do
     prev_count = Tag.count
     tag_params = { value: 'foo', label: 'bar' }
 
@@ -44,7 +42,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
-  test '#create duplicate tag' do
+  test 'create duplicate tag' do
     log_in! @valid_user
     prev_count = Tag.count
     tag_params = { value: Tag.first.value, label: Tag.first.label }
