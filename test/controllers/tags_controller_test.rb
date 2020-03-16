@@ -153,23 +153,69 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     assert_response 404
   end
 
-  test 'update tag belonging to current user with valid params' do
+  test 'edit tag when not logged in' do
+    get edit_api_tag_url(@valid_tag.id)
 
+    assert_response 401
+  end
+
+  test 'update tag belonging to current user with valid params' do
+    log_in! @valid_user
+    tag_params = { label: 'Taller Tatum', value: 'tallertatum' }
+    put api_tag_url(@valid_tag.id), params: { tag: tag_params }
+    updated_tag = Tag.find(@valid_tag.id)
+
+    assert_equal updated_tag.label, tag_params[:label]
+    assert_equal updated_tag.value, tag_params[:value]
+    assert_equal @response.body, filter_attrs(updated_tag).to_json
+    assert_response 200
   end
 
   test 'update tag belongning to current user with invalid params' do
+    log_in! @valid_user
+    tag_params = { label: '', value: '' }
+    previous_attrs = filter_attrs(@valid_tag).symbolize_keys
+    put api_tag_url(@valid_tag.id), params: { tag: tag_params }
+    updated_tag = Tag.find(@valid_tag.id)
 
+    assert_equal updated_tag.label, previous_attrs[:label]
+    assert_equal updated_tag.value, previous_attrs[:value]
+    assert_response 422
   end
 
   test 'update tag belonging to no user' do
+    log_in! @valid_user
+    tag_params = { label: 'Taller Tatum', value: 'tallertatum' }
+    put api_tag_url(@valid_tag_no_admin.id), params: { tag: tag_params }
+    updated_tag = Tag.find(@valid_tag_no_admin.id)
 
+    assert_equal updated_tag.label, tag_params[:label]
+    assert_equal updated_tag.value, tag_params[:value]
+    assert_equal @response.body, filter_attrs(updated_tag).to_json
+    assert_response 200
   end
 
   test 'update tag belonging to another user' do
+    log_in! @valid_user
+    tag_params = { label: 'Taller Tatum', value: 'tallertatum' }
+    previous_attrs = filter_attrs(@alternate_valid_tag).symbolize_keys
+    put api_tag_url(@alternate_valid_tag.id), params: { tag: tag_params }
+    updated_tag = Tag.find(@alternate_valid_tag.id)
 
+    assert_equal updated_tag.label, previous_attrs[:label]
+    assert_equal updated_tag.value, previous_attrs[:value]
+    assert_response 403
   end
 
   test 'update nonexistent tag' do
+    log_in! @valid_user
+    tag_id = rand(42069)
+    until not tags.pluck(:id).include? tag_id do
+      tag_id = rand(42069)
+    end
+    tag_params = { label: 'Taller Tatum', value: 'tallertatum' }
+    put api_tag_url(tag_id), params: { tag: tag_params }
 
+    assert_response 404
   end
 end
