@@ -36,6 +36,12 @@ class Api::TagsController < ApplicationController
 
   # fetch a tag record for updating
   def edit
+    @tag = Tag.find params[:id]
+    if !@tag.admin.nil? && @tag.admin != current_user
+      render json: { error: '403 requested operation not permitted' }, status: 403
+    else
+      render json: helpers.filter_tag_attrs(@tag).to_json, status: 200
+    end
   end
 
   # update a tag record
