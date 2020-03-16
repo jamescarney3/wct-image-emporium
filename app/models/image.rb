@@ -5,8 +5,6 @@ class Image < ApplicationRecord
   has_one_attached :asset
 
   belongs_to :admin, class_name: :User, foreign_key: :user_id, optional: true
-  has_many :image_tags
-  has_many :tags, through: :image_tags
 
 
   def asset_must_be_attached
