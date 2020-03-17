@@ -8,13 +8,32 @@ class ImageTagsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'create new image tag join' do
+    log_in! @valid_user
+    image_tag_params = { image_id: @valid_image.id, tag_id: @valid_tag.id }
 
+    post api_image_tags_url, params: { image_tag: image_tag_params }
+
+    assert @valid_image.tags.include? @valid_tag
+    assert_response 201
   end
 
   test 'create duplicate image tag join' do
+    log_in! @valid_user
+    @valid_image.tags << @valid_tag
+    image_tag_params = { image_id: @valid_image.id, tag_id: @valid_tag.id }
 
+    post api_image_tags_url, params: { image_tag: image_tag_params }
+
+    assert @valid_image.tags.include? @valid_tag
+    assert_response 409
   end
 
   test 'create image tag join while not logged in' do
+    image_tag_params = { image_id: @valid_image.id, tag_id: @valid_tag.id }
+
+    post api_image_tags_url, params: { image_tag: image_tag_params }
+
+    assert_not @valid_image.tags.include? @valid_tag
+    assert_response 401
   end
 end
