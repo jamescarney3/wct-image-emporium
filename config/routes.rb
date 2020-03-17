@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     resources :images, only: [:show, :create]
     resources :tags, only: [:index, :create, :destroy, :edit, :update]
+    resources :image_tags, only: [:create, :destroy]
   end
 
   # the following routes are intended specified to serve as redirect targets
