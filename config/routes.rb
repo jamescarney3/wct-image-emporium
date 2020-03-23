@@ -24,5 +24,12 @@ Rails.application.routes.draw do
   get 'unauthorized', to: 'static_pages#root', as: :unauthorized
   get 'admin', to: 'static_pages#root', as: :admin
 
-  get '*path', to: 'static_pages#root'
+  # rails really wants to match active_storage related routes to the catchall
+  # here because it seems like those routes are mounted after this in the
+  # initialization process - need to tell rails to let the active storage
+  # resources handle active storage routes in a constraints option here
+  #
+  # see config/initializers/constants.rb for constraint lambda definition,
+  # seemed messy to define here
+  get '*path', to: 'static_pages#root', constraints: CATCHALL_ROUTE_CONSTRAINT
 end
