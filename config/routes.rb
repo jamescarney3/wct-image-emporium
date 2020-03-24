@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   end
 
   namespace :api, defaults: { format: :json } do
-    resources :images, only: [:show, :create]
+    resources :images, only: [:index, :show, :create]
     resources :tags, only: [:index, :create, :destroy, :edit, :update]
     resources :image_tags, only: [:create, :destroy]
   end

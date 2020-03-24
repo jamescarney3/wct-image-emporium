@@ -10,17 +10,17 @@ class Api::ImageTagsController < ApplicationController
       render json: { error: '409 conflict with existing record' }, status: 409
     elsif @image.tags << @tag
       @image_tag = @image.image_tags.find_by image_id: @image.id, tag_id: @tag.id
-      render json: @image_tag, status: 200
+      render :show, status: 200
     else
       render json: { error: '400 bad request' }, status: 400
     end
   end
 
   def destroy
-    @image = ImageTag.find params[:id]
+    @image_tag = ImageTag.find params[:id]
 
-    if @image.delete
-      render json: @image
+    if @image_tag.delete
+      render :show, status: 200
     else
       render json: { error: '400 bad request' }, status: 400
     end

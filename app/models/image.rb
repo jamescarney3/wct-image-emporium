@@ -8,10 +8,11 @@ class Image < ApplicationRecord
   has_many :image_tags
   has_many :tags, through: :image_tags
 
+  private
 
-  def asset_must_be_attached
-    if not asset.attached?
-      errors.add :asset, 'must be attached'
+    def asset_must_be_attached
+      if not asset.attached?
+        errors.add :asset, 'must be attached'
+      end
     end
-  end
 end
