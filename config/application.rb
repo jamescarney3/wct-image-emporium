@@ -7,7 +7,10 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 # load up the secret stuff
-Dotenv.load('.env')
+begin
+  Dotenv.load('.env')
+rescue
+end
 
 module WctImageEmporium
   class Application < Rails::Application
