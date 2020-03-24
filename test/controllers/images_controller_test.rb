@@ -7,6 +7,26 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     @valid_user = users :valid_user
   end
 
+  test 'index' do
+    get api_images_path
+
+    response_json = [
+      {
+        title: @valid_image.title,
+        user_id: @valid_image.admin.id,
+        url: @valid_image.asset.attached? ? rails_blob_url(@valid_image.asset) : nil,
+      },
+      {
+        title: @no_admin_image.title,
+        user_id: nil,
+        url: @no_admin_image.asset.attached? ? rails_blob_url(@no_admin_image.asset) : nil,
+      },
+    ]
+
+    assert_equal response_json, JSON.parse(@response.body).map(&:symbolize_keys)
+    assert_response :success
+  end
+
   test '#show existing image with admin' do
     # call get with id param matching a valid fixture image
     get api_image_path @valid_image.id
