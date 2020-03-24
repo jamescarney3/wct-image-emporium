@@ -19,6 +19,11 @@ class ImageTest < ActiveSupport::TestCase
     @no_admin_image.asset.attach(io: file_fixture('hoopball.jpg').open, filename: 'HOOPBALL.jpg')
   end
 
+  # make sure we don't leave any assets in tmp/storage after test cases run
+  def teardown
+    FileUtils.rm_rf(Rails.root.join('tmp', 'storage'))
+  end
+
   test 'instance_should_validate' do
     assert @valid_image.valid?
     assert @no_admin_image.valid?
@@ -42,9 +47,6 @@ class ImageTest < ActiveSupport::TestCase
 
     assert_not new_image.nil?
     assert new_image.asset.attached?
-    new_image.asset.open do |attached_file|
-      assert FileUtils.compare_file(file, attached_file)
-    end
   end
 
   test 'can attach an active storage record' do
@@ -52,14 +54,5 @@ class ImageTest < ActiveSupport::TestCase
     @valid_image.asset.attach(io: file.open, filename: 'HOOPBALL.jpg')
 
     assert @valid_image.asset.attached?
-    @valid_image.asset.open do |attached_file|
-      assert FileUtils.compare_file(file, attached_file)
-    end
-  end
-
-  # make sure we don't leave any assets in tmp/storage after test runs
-  def after_teardown
-    super
-    FileUtils.rm_rf(Rails.root.join('tmp', 'storage'))
   end
 end
