@@ -14,9 +14,16 @@ class ImageTagsControllerTest < ActionDispatch::IntegrationTest
     post api_image_tags_url, params: { image_tag: image_tag_params }
 
     assert @valid_image.tags.include? @valid_tag
-    @image_tag = ImageTag.find_by image_id: @valid_image.id, tag_id: @valid_tag.id
+    assert @valid_tag.images.include? @valid_image
 
-    assert_equal @response.body, @image_tag.to_json
+    @image_tag = ImageTag.last
+    response_json = {
+      id: @image_tag.id,
+      image_id: @valid_image.id,
+      tag_id: @valid_tag.id,
+    }
+
+    assert_equal JSON.parse(@response.body).symbolize_keys, response_json
     assert_response 200
   end
 
@@ -47,7 +54,13 @@ class ImageTagsControllerTest < ActionDispatch::IntegrationTest
 
     delete api_image_tag_url id: @image_tag.id
 
-    assert_equal @response.body, @image_tag.to_json
+    response_json = {
+      id: @image_tag.id,
+      image_id: @valid_image.id,
+      tag_id: @valid_tag.id,
+    }
+
+    assert_equal JSON.parse(@response.body).symbolize_keys, response_json
     assert_response 200
   end
 
