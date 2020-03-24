@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'json'
 
 class TagsControllerTest < ActionDispatch::IntegrationTest
   def setup
@@ -10,7 +11,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def filter_attrs(tag)
-    tag.attributes.filter {  |k, v| ['id', 'label', 'value'].include? k }
+    tag.attributes.filter { |k, v| ['id', 'label', 'value'].include? k }
   end
 
   test 'index tags' do
@@ -18,7 +19,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
 
     tags = Tag.all.map(&method(:filter_attrs))
 
-    assert_equal @response.body, tags.to_json
+    assert_equal JSON.parse(@response.body), tags
     assert_response :success
   end
 
@@ -33,7 +34,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     assert_equal new_tag.label, tag_params[:label]
     assert_equal new_tag.value, tag_params[:value]
 
-    assert_equal @response.body, filter_attrs(new_tag).to_json
+    assert_equal JSON.parse(@response.body), filter_attrs(new_tag)
     assert_response :success
   end
 
@@ -78,7 +79,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     delete api_tag_url(@valid_tag.id)
 
     assert_not Tag.exists?(@valid_tag.id)
-    assert_equal @response.body, filter_attrs(@valid_tag).to_json
+    assert_equal JSON.parse(@response.body), filter_attrs(@valid_tag)
     assert_response 200
   end
 
@@ -95,7 +96,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     delete api_tag_url(@valid_tag_no_admin.id)
 
     assert_not Tag.exists?(@valid_tag_no_admin.id)
-    assert_equal @response.body, filter_attrs(@valid_tag_no_admin).to_json
+    assert_equal JSON.parse(@response.body), filter_attrs(@valid_tag_no_admin)
     assert_response 200
   end
 
@@ -123,7 +124,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     log_in! @valid_user
     get edit_api_tag_url(@valid_tag.id)
 
-    assert_equal @response.body, filter_attrs(@valid_tag).to_json
+    assert_equal JSON.parse(@response.body), filter_attrs(@valid_tag)
     assert_response 200
   end
 
@@ -131,7 +132,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     log_in! @valid_user
     get edit_api_tag_url(@valid_tag_no_admin)
 
-    assert_equal @response.body, filter_attrs(@valid_tag_no_admin).to_json
+    assert_equal JSON.parse(@response.body), filter_attrs(@valid_tag_no_admin)
     assert_response 200
   end
 
@@ -167,7 +168,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal updated_tag.label, tag_params[:label]
     assert_equal updated_tag.value, tag_params[:value]
-    assert_equal @response.body, filter_attrs(updated_tag).to_json
+    assert_equal JSON.parse(@response.body), filter_attrs(updated_tag)
     assert_response 200
   end
 
@@ -191,7 +192,7 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal updated_tag.label, tag_params[:label]
     assert_equal updated_tag.value, tag_params[:value]
-    assert_equal @response.body, filter_attrs(updated_tag).to_json
+    assert_equal JSON.parse(@response.body), filter_attrs(updated_tag)
     assert_response 200
   end
 

@@ -14,3 +14,13 @@ rescue
     <root directory>/.admins.yml
   MESSAGE
 end
+
+POST_MOUNT_RESOURCE_PATHS = [
+  'rails/active_storage'
+]
+
+CATCHALL_ROUTE_CONSTRAINT = lambda do |req|
+  POST_MOUNT_RESOURCE_PATHS.none? do |path|
+    req.path.include? path
+  end
+end
