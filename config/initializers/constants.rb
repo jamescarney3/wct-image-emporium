@@ -5,13 +5,14 @@ require 'yaml'
 # wrong make it an empty array and we just won't be able
 # to sign anyone in
 begin
-  ADMIN_IDS = (YAML.load File.read '.admins.yml').map(&:to_s)
+  ADMIN_IDS = YAML.load Base64.decode64 ENV['ADMINS_B64']
 rescue
   ADMIN_IDS = []
   puts <<-MESSAGE
     Please provide a whitelist of Twitter IDs to reference during
     admin level user creation in an array at the top level of:
-    <root directory>/.admins.yml
+    <root directory>/.admins.yml and run rails:admins:reset to set
+    it to an env variable base 64 encoded
   MESSAGE
 end
 
