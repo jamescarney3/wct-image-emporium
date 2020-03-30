@@ -1,5 +1,8 @@
 const path = require("path");
 const webpack = require("webpack");
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 module.exports = {
   entry: "./client/src/index.js",
@@ -20,15 +23,18 @@ module.exports = {
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },
   output: {
-    path: path.resolve(__dirname, "dist/"),
-    publicPath: "/dist/",
+    path: path.resolve(__dirname, "client/dist/"),
+    publicPath: "http://localhost:13666/dist/",
     filename: "bundle.js"
   },
   devServer: {
-    contentBase: path.join(__dirname, "public/"),
-    port: 3000,
-    publicPath: "http://localhost:3000/dist/",
-    hotOnly: true
+    contentBase: path.join(__dirname, "client/dist/"),
+    port: 13666,
+    publicPath: "http://localhost:13666/dist/",
+    hot: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    }
   },
   plugins: [new webpack.HotModuleReplacementPlugin()]
 };
