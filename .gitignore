@@ -40,4 +40,5 @@
 # CLIENT-RELATED IGNORABLE PATTERNS
 
 node_modules/*
-yarn.lock
+yarn-error.log
+client/dist/*
