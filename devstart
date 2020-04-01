@@ -1,0 +1,3 @@
+!#/bin/bash
+
+(trap 'kill 0' SIGINT; rails s & npm run dev)
