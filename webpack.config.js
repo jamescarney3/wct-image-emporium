@@ -46,6 +46,7 @@ module.exports = {
   resolve: {
     alias: {
       '~': path.resolve(__dirname, 'client/src/'),
+      styles: path.resolve(__dirname, 'client/styles/'),
     },
     extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
   },

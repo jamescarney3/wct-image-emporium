@@ -5,6 +5,6 @@ import 'bootstrap';
 
 import App from '~/app';
 
-import './styles/main.scss';
+import 'styles/main.scss';
 
 ReactDOM.render(React.createElement(App), document.getElementById('root'));
