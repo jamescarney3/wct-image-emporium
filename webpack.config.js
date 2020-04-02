@@ -1,23 +1,29 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const webpack = require('webpack');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
 module.exports = {
-  entry: "./client/src/index.js",
-  mode: "development",
+  entry: './client/src/index.ts',
+  mode: 'development',
+  devtool: 'source-map',
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: { presets: ["@babel/env"] }
+        loader: 'babel-loader',
+        options: { presets: ['@babel/env'] },
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /(node_modules|bower_components)/,
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(scss)$/,
@@ -28,33 +34,29 @@ module.exports = {
         }, {
           loader: 'postcss-loader', // Run post css actions
           options: {
-            plugins: function () { // post css plugins, can be exported to postcss.config.js
-              return [
-                require('precss'),
-                require('autoprefixer')
-              ];
-            }
-          }
+            // eslint-disable-next-line global-require
+            plugins: [require('precss'), require('autoprefixer')],
+          },
         }, {
-          loader: 'sass-loader' // compiles Sass to CSS
-        }]
-      }
-    ]
+          loader: 'sass-loader', // compiles Sass to CSS
+        }],
+      },
+    ],
   },
-  resolve: { extensions: ["*", ".js", ".jsx"] },
+  resolve: { extensions: ['*', '.js', '.jsx', '.ts', '.tsx'] },
   output: {
-    path: path.resolve(__dirname, "client/dist/"),
-    publicPath: "http://localhost:13666/dist/",
-    filename: "bundle.js"
+    path: path.resolve(__dirname, 'client/dist/'),
+    publicPath: 'http://localhost:13666/dist/',
+    filename: 'bundle.js',
   },
   devServer: {
-    contentBase: path.join(__dirname, "client/dist/"),
+    contentBase: path.join(__dirname, 'client/dist/'),
     port: 13666,
-    publicPath: "http://localhost:13666/dist/",
+    publicPath: 'http://localhost:13666/dist/',
     hot: true,
     headers: {
-      "Access-Control-Allow-Origin": "*"
-    }
+      'Access-Control-Allow-Origin': '*',
+    },
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()]
+  plugins: [new webpack.HotModuleReplacementPlugin()],
 };

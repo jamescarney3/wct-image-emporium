@@ -1,7 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-const App = () => {
+const App: React.SFC = () => {
   return (
     <Router>
       <h1>Praise be to SMARF</h1>
