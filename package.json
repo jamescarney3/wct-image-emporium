@@ -11,7 +11,10 @@
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --mode development",
-    "lint": "eslint --ext .js,.jsx --ignore-path .gitignore . --config .eslintrc.json && tslint --config tslint.json 'client/src/**/*'"
+    "lint": "yarn run _lintes6 && yarn run _lintts && yarn run _lintstyle",
+    "_lintstyle": "stylelint '**/*.scss'",
+    "_lintts": "tslint --config tslint.json 'client/src/**/*'",
+    "_lintes6": "eslint --ext .js,.jsx --ignore-path .gitignore . --config .eslintrc.json"
   },
   "repository": {
     "type": "git",
@@ -46,6 +49,8 @@
     "postcss-loader": "^3.0.0",
     "precss": "^4.0.0",
     "style-loader": "0.23.0",
+    "stylelint": "^13.2.1",
+    "stylelint-config-standard": "^20.0.0",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
     "webpack-cli": "^3.3.11",
