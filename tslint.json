@@ -1,0 +1,18 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "client/src/styles/**/*",
+      "client/dist/**/*"
+    ]
+  },
+  "jsRules": {},
+  "rules": {
+    "quotemark": [true, "single", "jsx-double", "avoid-escape"],
+    "no-consecutive-blank-lines": false
+  },
+  "rulesDirectory": []
+}

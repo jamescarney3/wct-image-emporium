@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "./client/dist/",
+    "sourceMap": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "~": ["client/src"]
+    }
+  }
+}
