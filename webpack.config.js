@@ -43,7 +43,12 @@ module.exports = {
       },
     ],
   },
-  resolve: { extensions: ['*', '.js', '.jsx', '.ts', '.tsx'] },
+  resolve: {
+    alias: {
+      '~': path.resolve(__dirname, 'client/src/'),
+    },
+    extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
+  },
   output: {
     path: path.resolve(__dirname, 'client/dist/'),
     publicPath: 'http://localhost:13666/dist/',

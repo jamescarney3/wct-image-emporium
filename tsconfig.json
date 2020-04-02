@@ -6,6 +6,10 @@
     "moduleResolution": "node",
     "jsx": "react",
     "allowJs": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "~": ["client/src"]
+    }
   }
 }

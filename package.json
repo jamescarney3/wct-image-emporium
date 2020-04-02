@@ -11,7 +11,7 @@
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --mode development",
-    "lint": "eslint --ext .js,.jsx --ignore-path .gitignore . --config .eslintrc.json"
+    "lint": "eslint --ext .js,.jsx --ignore-path .gitignore . --config .eslintrc.json && tslint --config tslint.json 'client/src/**/*'"
   },
   "repository": {
     "type": "git",

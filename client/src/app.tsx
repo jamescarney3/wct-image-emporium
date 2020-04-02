@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+// var a = 'foo';
+
 const App: React.SFC = () => {
   return (
     <Router>
