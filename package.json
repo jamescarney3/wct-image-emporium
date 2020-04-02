@@ -35,6 +35,8 @@
     "css-loader": "1.0.0",
     "dotenv": "^8.2.0",
     "style-loader": "0.23.0",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "3.3.0"
   },
