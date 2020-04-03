@@ -2,12 +2,14 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { StoreProvider } from '~/context/store';
+import { Header } from '~/components';
 import { Unauthorized } from '~/pages';
 
 
 const App: React.SFC = () => {
   return (
     <StoreProvider>
+      <Header />
       <Router>
         <h1>Praise be to SMARF</h1>
         <a href="/auth/twitter">sign in</a>
