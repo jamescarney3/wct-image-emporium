@@ -9,7 +9,9 @@ import { Unauthorized } from '~/pages';
 const App: React.SFC = () => {
   return (
     <StoreProvider>
-      <Header />
+      <div className="bg-dark">
+        <Header />
+      </div>
       <Router>
         <h1>Praise be to SMARF</h1>
         <a href="/auth/twitter">sign in</a>
