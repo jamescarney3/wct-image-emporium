@@ -9,8 +9,8 @@ const Unauthorized: React.FC = () => {
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-lg-6">
-          <img src={robPath} className="w-100 mt-5" />
-          <h2>REJECTED</h2>
+          <img src={robPath} className="w-100 mt-lg-3" />
+          <h2 className="mt-3">REJECTED</h2>
           <p>
             Either something went wrong with the authentication process or your
             Twitter account isn't whitelisted for administrator access. If you'd
