@@ -1,6 +1,6 @@
 class Auth::SessionsController < ApplicationController
   def create
-    @user = User.from_uid request.env['omniauth.auth'].uid
+    @user = User.from_uid request.env['omniauth.auth'].uid.to_i
     if @user.nil?
       redirect_to :unauthorized
     else
