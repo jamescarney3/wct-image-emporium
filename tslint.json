@@ -6,13 +6,15 @@
   "linterOptions": {
     "exclude": [
       "client/src/styles/**/*",
-      "client/dist/**/*"
+      "client/dist/**/*",
+      "app/**/*"
     ]
   },
   "jsRules": {},
   "rules": {
     "quotemark": [true, "single", "jsx-double", "avoid-escape"],
-    "no-consecutive-blank-lines": false
+    "no-consecutive-blank-lines": false,
+    "ordered-imports": false
   },
   "rulesDirectory": []
 }
