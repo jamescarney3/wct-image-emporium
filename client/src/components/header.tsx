@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { useStore } from '~/context/store';
+
 
 interface IHeaderProps {
   signedIn?: boolean;
@@ -9,10 +11,12 @@ interface IHeaderProps {
 const SIGNED_IN_TEXT = 'admin tools';
 const NOT_SIGNED_IN_TEXT = 'admin login';
 
-const SIGNED_IN_PATH = '#'; // figure out what this is gonna be and replace
+const SIGNED_IN_PATH = '/admin/home';
 const NOT_SIGNED_IN_PATH = '/auth/twitter';
 
-const Header: React.FC<IHeaderProps> = ({ signedIn }) => {
+const Header: React.FC<IHeaderProps> = () => {
+  const [user, userActionCreators] = useStore('user');
+  const { signedIn } = user;
 
   return (
     <nav className="container navbar navbar-expand-lg navbar-dark bg-dark">
@@ -38,12 +42,11 @@ const Header: React.FC<IHeaderProps> = ({ signedIn }) => {
             </div>
           </div>
         </form>
-        <a
-          className="navbar-navitem d-block my-3 ml-lg-3"
-          href={signedIn ? SIGNED_IN_PATH : NOT_SIGNED_IN_PATH}
-        >
-          {signedIn ? SIGNED_IN_TEXT : NOT_SIGNED_IN_TEXT}
-        </a>
+        <div className="navbar-navitem my-3 ml-lg-3 flex-grow-2">
+          <a href={signedIn ? SIGNED_IN_PATH : NOT_SIGNED_IN_PATH}>
+            {signedIn ? SIGNED_IN_TEXT : NOT_SIGNED_IN_TEXT}
+          </a>
+        </div>
       </div>
     </nav>
   );
