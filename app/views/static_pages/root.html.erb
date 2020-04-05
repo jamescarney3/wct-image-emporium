@@ -10,5 +10,9 @@
     <div id="root"></div>
   </body>
 
+  <% if !@current_user.nil? %>
+    <script>window.wctAuthenticated = true;</script>
+  <% end %>
+
   <%= javascript_include_tag get_bundle_asset_location %>
 </html>

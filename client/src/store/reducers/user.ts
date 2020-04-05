@@ -4,9 +4,15 @@ const actionTypes = {
   SIGN_OUT: 'SIGN_OUT',
 };
 
+// hydrating this from the rails server - weird pattern but we can probably
+// spin less since we're only ever doing cookie auth... writing stuff to the
+// DOM is ugly, so sue me
 const initialState = {
-  signedIn: false,
+  signedIn: !!(window as any).wctAuthenticated,
 };
+
+// at least we're cleaning up after ourselves
+delete (window as any).wctAuthenticated;
 
 const userReducer = (state = initialState, action): {} => {
   switch (action.type) {
