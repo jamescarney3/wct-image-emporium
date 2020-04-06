@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { StoreProvider } from '~/context/store';
-import { Header } from '~/components';
+import { AuthRoute, Header } from '~/components';
 import { Unauthorized } from '~/pages';
 
 
@@ -15,7 +15,7 @@ const App: React.SFC = () => {
         </div>
         <Switch>
           <Route path="/unauthorized" component={Unauthorized} />
-          <Route path="/admin"><div>welcome, king.</div></Route>
+          <AuthRoute path="/admin"><div>welcome, king.</div></AuthRoute>
           <Route path="/"><div>home page</div></Route>
         </Switch>
       </Router>
