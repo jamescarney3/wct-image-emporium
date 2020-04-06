@@ -10,6 +10,7 @@
     "baseUrl": ".",
     "paths": {
       "~": ["/client/src"]
-    }
+    },
+    "noUnusedImports": true
   }
 }

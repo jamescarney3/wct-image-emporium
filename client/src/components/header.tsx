@@ -15,7 +15,7 @@ const SIGNED_IN_PATH = '/admin/home';
 const NOT_SIGNED_IN_PATH = '/auth/twitter';
 
 const Header: React.FC<IHeaderProps> = () => {
-  const [user, userActionCreators] = useStore('user');
+  const [user] = useStore('user');
   const { signedIn } = user;
 
   return (
