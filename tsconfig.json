@@ -10,7 +10,6 @@
     "baseUrl": ".",
     "paths": {
       "~": ["/client/src"]
-    },
-    "noUnusedLocals": true
+    }
   }
 }
