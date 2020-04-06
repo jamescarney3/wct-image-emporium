@@ -1,9 +1,10 @@
-import { bindActionCreators, combineReducers, createStore } from 'redux';
+import { bindActionCreators, combineReducers, createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 import user, { userActionCreators } from './reducers/user';
 
 
-const store = createStore(combineReducers({ user }));
+const store = createStore(combineReducers({ user }), applyMiddleware(thunk));
 
 const actionCreators = {
   user: bindActionCreators(userActionCreators, store.dispatch),
