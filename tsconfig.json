@@ -11,6 +11,6 @@
     "paths": {
       "~": ["/client/src"]
     },
-    "noUnusedImports": true
+    "noUnusedLocals": true
   }
 }
