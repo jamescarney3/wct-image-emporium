@@ -26,8 +26,23 @@ const userReducer = (state = initialState, action): {} => {
 };
 
 const userActionCreators = {
-  signIn: () => ({ type: actionTypes.SIGN_IN }),
-  signOut: () => ({ type: actionTypes.SIGN_OUT }),
+  // signIn: there is no signIn, you're never signing in asychronously because
+  // rails pre-hydrates the wctAuthenticated window prop on initialize, either
+  // from the twitter auth callback or from your session token on initial req
+  signOut: () => (dispatch) => {
+    fetch('/auth/sessions', {
+      credentials: 'same-origin',
+      headers: { // lol this sucks, make a service
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': (document.getElementsByName('csrf-token')[0] as any).content,
+      },
+      method: 'DELETE',
+    }).then((res) => {
+      dispatch({ type: actionTypes.SIGN_OUT });
+    }).catch((err) => {
+      alert('oopsie');
+    });
+  },
 };
 
 export { userActionCreators };
