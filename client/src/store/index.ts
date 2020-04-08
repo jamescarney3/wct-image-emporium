@@ -1,12 +1,22 @@
 import { bindActionCreators, combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import user, { userActionCreators } from './reducers/user';
+import imagesReducerFactory, { actionCreatorsFactory as imagesACF } from './reducers/images';
+import recordsReducer, { actionCreators as recordsActionCreators } from './reducers/records';
+import userReducer, { userActionCreators } from './reducers/user';
 
 
-const store = createStore(combineReducers({ user }), applyMiddleware(thunk));
+const reducers = {
+  adminImages: imagesReducerFactory('ADMIN'),
+  records: recordsReducer,
+  user: userReducer,
+};
+
+const store = createStore(combineReducers(reducers), applyMiddleware(thunk));
 
 const actionCreators = {
+  adminImages: bindActionCreators(imagesACF('ADMIN'), store.dispatch),
+  records: bindActionCreators(recordsActionCreators, store.dispatch),
   user: bindActionCreators(userActionCreators, store.dispatch),
 };
 

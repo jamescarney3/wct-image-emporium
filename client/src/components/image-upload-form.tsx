@@ -1,38 +1,99 @@
-import React from 'react';
-import JSFormData from 'js-form-data';
+import React, { useEffect, useState } from 'react';
+
+import { useStore } from '~/context/store';
 
 
 const ImageUploadForm: React.SFC = () => {
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const formData = new JSFormData.default(e.target);
+  const [adminImages, adminImagesActionCreators] = useStore('adminImages');
+  const { create, clean } = adminImagesActionCreators;
 
-    fetch('/api/images', {
-      body: new FormData(e.target),
-      credentials: 'same-origin',
-      headers: { // lol this sucks, make a service
-        'X-CSRF-Token': (document.getElementsByName('csrf-token')[0] as any).content,
-      },
-      method: 'POST',
-    }).then(
-      (res) => console.log(res) // tslint:disable-line
-    ).catch(
-      (err) => console.log(err) // tslint:disable-line
-    );
+  const [title, setTitle] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+
+  // clear the store on unmount
+  useEffect(() => clean, []);
+
+  const onFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewUrl(reader.result);
+      };
+      reader.onerror = () => {
+        setPreviewUrl(null);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    create(new FormData(e.target));
+  };
+
+  const successMessage = (adminImages.created &&
+    <div className="form-group">
+      <div className="alert alert-success" role="alert">
+        image record for {adminImages.created.title} succesfully created
+      </div>
+    </div>
+  );
+
+  const loadingMessage = (adminImages.loading &&
+    <div className="form-group">
+      <div className="alert alert-info" role="alert">
+        processing upload
+      </div>
+    </div>
+  );
+
+  const errorMessage = (adminImages.error &&
+    <div className="form-group">
+      <div className="alert alert-danger" role="alert">
+        there was an error submitting your image: {adminImages.error.message}
+      </div>
+    </div>
+  );
+
+  const imagePreview = (previewUrl &&
+    <div className="form-group">
+      <img className="media-object w-100" src={previewUrl} />
+    </div>
+  );
+
   return (
-    <form className="mt-lg-5" onSubmit={onSubmit}>
+    <form className="mt-5" onSubmit={onSubmit}>
+      {successMessage}
+      {errorMessage}
+      {loadingMessage}
       <div className="form-group">
         <label htmlFor="image[title]">image title</label>
-        <input type="text" className="form-control" name="image[title]" placeholder="image title" required />
+        <input
+          type="text"
+          className="form-control"
+          name="image[title]"
+          onChange={(e) => { setTitle(e.target.value); }}
+          placeholder="image title"
+          required
+        />
       </div>
       <div className="form-group">
         <label htmlFor="image[asset]">image file</label>
-        <input type="file" className="form-control-file" name="image[asset]" accept="image/*" />
+        <input
+          type="file"
+          className="form-control-file"
+          name="image[asset]"
+          onChange={onFileChange}
+          accept="image/*"
+        />
       </div>
-      <button type="submit" className="btn btn-primary">submit</button>
+      {imagePreview}
+      <div className="form-group">
+        <button type="submit" className="btn btn-primary">submit</button>
+      </div>
     </form>
   );
 };

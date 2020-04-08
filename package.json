@@ -63,7 +63,6 @@
     "autoprefixer": "^9.7.5",
     "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",
-    "js-form-data": "^1.1.0",
     "node-sass": "^4.13.1",
     "popper.js": "^1.16.1",
     "react": ">=16.8.0",
