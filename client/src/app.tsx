@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { StoreProvider } from '~/context/store';
 import { AuthRoute, Header } from '~/components';
-import { Unauthorized, AdminHome } from '~/pages';
+import { Unauthorized, AdminHome } from '~/views';
 
 
 const App: React.SFC = () => {

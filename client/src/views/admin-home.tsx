@@ -1,8 +1,10 @@
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 
-import { AuthRoute, ImageUploadForm } from '~/components';
+import { AuthRoute } from '~/components';
 import { useStore } from '~/context/store';
+
+import ImageUpload from './image-upload';
 
 
 interface IAdminHome {
@@ -38,7 +40,7 @@ const AdminHome: React.SFC<IAdminHome> = ({ match }) => {
         </div>
         <div className="col-lg-9">
           <Switch>
-            <AuthRoute path={`${match.path}/image-upload`} component={ImageUploadForm} />
+            <AuthRoute path={`${match.path}/image-upload`} component={ImageUpload} />
           </Switch>
         </div>
       </div>
