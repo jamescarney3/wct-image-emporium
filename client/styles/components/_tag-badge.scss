@@ -1,0 +1,16 @@
+.tag-badge {
+  &__dismiss {
+    float: unset;
+    font-weight: normal;
+    color: $red;
+    cursor: pointer;
+    font-size: 1.3rem;
+    line-height: 30%;
+    position: relative;
+    top: 2px;
+
+    &:hover {
+      color: rgba($red, 0.8);
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.tag-input-autocomplete {
+  &__item {
+    cursor: pointer;
+    z-index: 999;
+
+    &:hover {
+      background-color: $secondary;
+    }
+  }
+}

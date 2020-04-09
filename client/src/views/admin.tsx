@@ -24,12 +24,6 @@ const Admin: React.SFC<IAdmin> = ({ match }) => {
               <Link to={match.path}>admin home</Link>
             </li>
             <li className="list-group-item">
-              <Link to={`${match.path}/images`}>my images</Link>
-            </li>
-            <li className="list-group-item">
-              <Link to={`${match.path}/tags`}>my tags</Link>
-            </li>
-            <li className="list-group-item">
               <Link to={`${match.path}/image-upload`}>image upload</Link>
             </li>
             <li className="list-group-item">
