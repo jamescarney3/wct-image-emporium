@@ -48,7 +48,9 @@ const actionCreatorsFactory = (namespace?: string) => ({
     post(
       '/api/images', formData,
     ).then((data) => {
-      dispatch({ type: recordsActionTypes.MERGE_RECORD, recordType: 'images', data });
+      const { tags, ...rest } = data;
+      dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
+      dispatch({ type: recordsActionTypes.MERGE_RECORD, recordType: 'images', data: rest });
       dispatch({ type: injectNamespace(actionTypes.CREATE, namespace), data });
     }).catch((err) => {
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
@@ -59,7 +61,13 @@ const actionCreatorsFactory = (namespace?: string) => ({
     get(
       '/api/images',
     ).then((data) => {
-      dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'images', data });
+      const { images, tags } = data.reduce((acc, image) => {
+        const { tags: tagRecords, ...rest } = image;
+        const imageRecord = rest;
+        return { images: [...acc.images, imageRecord], tags: [...acc.tags, ...tagRecords] };
+      }, { images: [], tags: [] });
+      dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
+      dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'images', data: images });
       dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data });
     }).catch((err) => {
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
