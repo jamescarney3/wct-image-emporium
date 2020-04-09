@@ -15,14 +15,12 @@ const recordsReducer = (state = initialState, action) => {
 
     case actionTypes.MERGE_RECORDS:
       const records = data.reduce((acc, el) => {
-        const { id, ...rest } = el;
-        return { ...acc, [id]: rest };
+        return { ...acc, [el.id]: el };
       }, {});
       return { ...state, [recordType]: { ...state[recordType], ...records } };
 
     case actionTypes.MERGE_RECORD:
-      const { id, ...rest } = data;
-      return { ...state, [recordType]: { ...state[recordType], [id]: rest }};
+      return { ...state, [recordType]: { ...state[recordType], [data.id]: data }};
 
     default:
       return state;
