@@ -1,1 +1,1 @@
-json.(image, :title, :user_id)
+json.(image, :title, :user_id, :id)

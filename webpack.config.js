@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
+const globImporter = require('node-sass-glob-importer');
+
 
 dotenv.config();
 
@@ -39,6 +41,9 @@ module.exports = {
           },
         }, {
           loader: 'sass-loader', // compiles Sass to CSS
+          options: {
+            importer: globImporter(),
+          },
         }],
       },
     ],

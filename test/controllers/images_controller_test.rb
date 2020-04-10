@@ -15,11 +15,17 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
         title: @valid_image.title,
         user_id: @valid_image.admin.id,
         url: @valid_image.asset.attached? ? rails_blob_url(@valid_image.asset) : nil,
+        id: @valid_image.id,
+        tags: [],
+        tag_ids: [],
       },
       {
         title: @no_admin_image.title,
         user_id: nil,
         url: @no_admin_image.asset.attached? ? rails_blob_url(@no_admin_image.asset) : nil,
+        id: @no_admin_image.id,
+        tags: [],
+        tag_ids: [],
       },
     ]
 
@@ -35,7 +41,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       title: @valid_image.title,
       user_id: @valid_image.admin.id,
       url: @valid_image.asset.attached? ? rails_blob_url(@valid_image.asset) : nil,
-      tags: @valid_image.tags.map { |tag| tag.attributes.filter { |k, v| [:id, :value, :label] } }
+      id: @valid_image.id,
+      tags: @valid_image.tags.map { |tag| tag.attributes.filter { |k, v| [:id, :value, :label] } },
+      tag_ids: [],
     }
 
     assert_equal response_hash, JSON.parse(@response.body).symbolize_keys
@@ -48,7 +56,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     response_hash = {
       title: @no_admin_image.title,
       user_id: nil,
+      id: @no_admin_image.id,
       url: @no_admin_image.asset.attached? ? rails_blob_url(@no_admin_image.asset) : nil,
+      tag_ids: @no_admin_image.tags.map { |tag| tag.id },
       tags: @no_admin_image.tags.map { |tag| tag.attributes.filter { |k, v| [:id, :value, :label] } }
     }
 
@@ -75,8 +85,10 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     response_hash = {
       title: 'erotic city',
       user_id: @valid_user.id,
+      id: Image.last.id,
       url: Image.last.asset.attached? ? rails_blob_url(Image.last.asset) : nil,
       tags: [],
+      tag_ids: [],
     }
 
     assert_equal response_hash, JSON.parse(@response.body).symbolize_keys

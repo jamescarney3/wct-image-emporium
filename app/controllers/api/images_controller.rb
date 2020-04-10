@@ -16,6 +16,18 @@ class Api::ImagesController < ApplicationController
     @image = Image.new image_params
     @image.admin = current_user
 
+    if params[:tag_ids]
+      params[:tag_ids].each do |id|
+        @image.tags << Tag.find(id.to_i)
+      end
+    end
+
+    if params[:new_tags]
+      params[:new_tags].each do |label|
+        @image.tags << Tag.new(label: label, value: label.sub(/[^a-zA-Z0-9]/, '').downcase, admin: current_user)
+      end
+    end
+
     if @image.save
       render :show, status: 200
     else
@@ -26,7 +38,7 @@ class Api::ImagesController < ApplicationController
   private
 
     def image_params
-      params.require(:image).permit(:title, :asset)
+      params.require(:image).permit(:title, :asset, :tag_ids, :new_tags)
     end
 
     def record_not_found
