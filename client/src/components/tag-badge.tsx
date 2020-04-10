@@ -9,7 +9,7 @@ interface ITagBadge {
 }
 
 const TagBadge: React.SFC<ITagBadge> = ({ label, to, onDismiss }) => {
-  const tagBadgeClass = 'tag-badge badge badge-secondary p-2 mr-1';
+  const tagBadgeClass = 'tag-badge badge badge-secondary p-2 mr-1 mb-1';
   const dismissButton = (onDismiss &&
     <span onClick={onDismiss} role="button" className="tag-badge__dismiss" aria-label="Remove tag">
       &times;
@@ -19,9 +19,7 @@ const TagBadge: React.SFC<ITagBadge> = ({ label, to, onDismiss }) => {
   return (to ?
     <Link className={tagBadgeClass} to={to}>{label}</Link>
     :
-    <span className={tagBadgeClass}>
-      {label} {dismissButton}
-    </span>
+    <span className={tagBadgeClass}>{label} {dismissButton}</span>
   );
 };
 
