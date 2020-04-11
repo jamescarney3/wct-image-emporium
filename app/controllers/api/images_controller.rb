@@ -35,6 +35,24 @@ class Api::ImagesController < ApplicationController
     end
   end
 
+  def random
+    @image = Image.offset(rand(Image.count)).first
+    if !@image.nil?
+      render :show, status: 200
+    else
+      render json: { errors: '418 i\'m a teapot' }, status: 418
+    end
+  end
+
+  def sample
+    @images = Image.where(id: Image.pluck(:id).sample(params[:count].to_i || 12))
+    if !@images.nil?
+      render :index, status: 200
+    else
+      render json: { errors: '418 i\'m a teapot' }, status: 418
+    end
+  end
+
   private
 
     def image_params
