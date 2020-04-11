@@ -1,12 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 const ImagePanel = ({ image }) => {
   return (
-    <div className="my-2">
+    <Link className="my-3 d-block" to={`/images/${image.id}`}>
       <img src={image.url} className="w-100" />
-      <div>{image.title}</div>
-    </div>
+      <h3>{image.title}</h3>
+    </Link>
   );
 };
 

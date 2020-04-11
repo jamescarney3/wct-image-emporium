@@ -56,6 +56,32 @@ const actionCreatorsFactory = (namespace?: string) => ({
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
     });
   },
+  show: (id) => (dispatch) => {
+    dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
+    get(
+      `/api/images/${id}`,
+    ).then((data) => {
+      const { tags, ...rest } = data;
+      dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
+      dispatch({ type: recordsActionTypes.MERGE_RECORD, recordType: 'images', data: rest });
+      dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data: [rest] });
+    }).catch((err) => {
+      dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
+    });
+  },
+  random: (id) => (dispatch) => {
+    dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
+    get(
+      `/api/images/random`,
+    ).then((data) => {
+      const { tags, ...rest } = data;
+      dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
+      dispatch({ type: recordsActionTypes.MERGE_RECORD, recordType: 'images', data: rest });
+      dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data: [rest] });
+    }).catch((err) => {
+      dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
+    });
+  },
   index: () => (dispatch) => {
     dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
     get(
@@ -70,6 +96,24 @@ const actionCreatorsFactory = (namespace?: string) => ({
       dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'images', data: images });
       dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data });
     }).catch((err) => {
+      dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
+    });
+  },
+  sample: () => (dispatch) => {
+    dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
+    get(
+      '/api/images/sample?count=12',
+    ).then((data) => {
+      const { images, tags } = data.reduce((acc, image) => {
+        const { tags: tagRecords, ...rest } = image;
+        const imageRecord = rest;
+        return { images: [...acc.images, imageRecord], tags: [...acc.tags, ...tagRecords] };
+      }, { images: [], tags: [] });
+      dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
+      dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'images', data: images });
+      dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data });
+    }).catch((err) => {
+      alert('no');
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
     });
   },

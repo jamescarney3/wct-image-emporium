@@ -3,7 +3,9 @@ const CSRF_TOKEN = (document.getElementsByName('csrf-token')[0] as any).content;
 
 const handleFetchError = (res) => {
   if (!res.ok) {
-    return res.json().then((data) => { throw Error(data.error); });
+    return res.json().then((data) => {
+      throw data.errors;
+    });
   }
 };
 
@@ -29,6 +31,7 @@ const get = (url) => {
     headers: { 'X-CSRF-Token': CSRF_TOKEN },
     method: 'GET',
   }).then((res) => {
+    (window as any).res = res;
     return res.ok ? res.json() : handleFetchError(res);
   });
 };
