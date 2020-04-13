@@ -14,6 +14,13 @@ const injectNamespace = (actionType: string, namespace?: string, delimiter: stri
   return `${prefix}${actionType}`;
 };
 
+const encodeQString = (params) => {
+  const queryString = Object.keys(params).map((key) => (
+    `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
+  )).join('&');
+  return queryString ? `?${queryString}` : '';
+};
+
 const post = (url, body) => {
   return fetch(url, {
     body,
@@ -25,15 +32,24 @@ const post = (url, body) => {
   });
 };
 
-const get = (url) => {
-  return fetch(url, {
+const get = (url, params = {}) => {
+  return fetch(url + encodeQString(params), {
     credentials: 'same-origin',
     headers: { 'X-CSRF-Token': CSRF_TOKEN },
     method: 'GET',
   }).then((res) => {
-    (window as any).res = res;
     return res.ok ? res.json() : handleFetchError(res);
   });
 };
 
-export { get, post, injectNamespace };
+const destroy = (url) => {
+  return fetch(url, {
+    credentials: 'same-origin',
+    headers: { 'X-CSRF-Token': CSRF_TOKEN },
+    method: 'DELETE',
+  }).then((res) => {
+    return res.ok ? res.json() : handleFetchError(res);
+  });
+};
+
+export { get, post, destroy, injectNamespace, encodeQString };

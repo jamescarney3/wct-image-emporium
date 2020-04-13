@@ -1,4 +1,4 @@
-import { get, post, injectNamespace } from './utils';
+import { get, post, destroy, injectNamespace } from './utils';
 import { actionTypes as recordsActionTypes } from './records';
 
 const actionTypes = {
@@ -30,7 +30,7 @@ const imagesReducerFactory = (namespace?: string) => (state = initialState, acti
     case injectNamespace(actionTypes.UPDATE, namespace):
       return { ...asyncBase, data: state.data, updated: action.data };
     case injectNamespace(actionTypes.DELETE, namespace):
-      return { ...asyncBase, data: [/* data minus id */], deleted: action.data };
+      return { ...asyncBase, data: state.data.filter((id) => id !== action.data.id), deleted: action.data };
     case injectNamespace(actionTypes.REQUEST, namespace):
       return { ...asyncBase, data: state.data, loading: true };
     case injectNamespace(actionTypes.ERROR, namespace):
@@ -82,10 +82,11 @@ const actionCreatorsFactory = (namespace?: string) => ({
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
     });
   },
-  index: () => (dispatch) => {
+  index: (params) => (dispatch) => {
     dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
     get(
       '/api/images',
+      params,
     ).then((data) => {
       const { images, tags } = data.reduce((acc, image) => {
         const { tags: tagRecords, ...rest } = image;
@@ -113,11 +114,21 @@ const actionCreatorsFactory = (namespace?: string) => ({
       dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'images', data: images });
       dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data });
     }).catch((err) => {
-      alert('no');
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
     });
   },
-  clean: () => ({ type: injectNamespace(actionTypes.CLEAN, namespace) }),
+  destroy: (id) => (dispatch) => {
+    dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
+    destroy(
+      `/api/images/${id}`,
+    ).then((data) => {
+      const { tags, ...rest } = data;
+      dispatch({ type: injectNamespace(actionTypes.DELETE, namespace), data: rest });
+    }).catch((err) => {
+      dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
+    });
+  },
+  clear: () => ({ type: injectNamespace(actionTypes.CLEAN, namespace) }),
 });
 
 

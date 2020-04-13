@@ -1,5 +1,4 @@
 export { default as Unauthorized } from './unauthorized';
-export { default as AdminHome } from './admin-home';
-export { default as ImageUpload } from './image-upload';
+export { default as Home } from './home';
 export { default as Admin } from './admin';
 export { default as Images } from './images';

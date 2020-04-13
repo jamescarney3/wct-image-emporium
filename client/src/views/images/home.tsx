@@ -6,7 +6,6 @@ import { ImagePage } from '~/components';
 
 const ImagesHome = () => {
   const [images, imagesActionCreators] = useStore('images');
-  const { imageDetail } = useAccessors();
   const { index, clear } = imagesActionCreators;
   const { imagesCollection } = useAccessors();
 

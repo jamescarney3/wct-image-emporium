@@ -9,13 +9,13 @@ const processTagLabel = (label: string): string => {
   return label.replace(/[^a-zA-Z0-9]/ig, '').toLowerCase();
 };
 
-const ImageUploadForm: React.SFC = () => {
+const ImagesNew: React.SFC = () => {
 
   const [adminImages, adminImagesActionCreators] = useStore('adminImages');
   const [allTags, allTagsActionCreators] = useStore('allTags');
   const [records] = useStore('records');
 
-  const { create, clean } = adminImagesActionCreators;
+  const { create, clear } = adminImagesActionCreators;
   const { index } = allTagsActionCreators;
 
   const [title, setTitle] = useState('');
@@ -29,8 +29,9 @@ const ImageUploadForm: React.SFC = () => {
 
   // clear image store on mount and fetch tags
   useEffect(() => {
-    clean();
+    clear();
     index();
+    return clear;
   }, []);
 
   const onTagsFormSubmit = (e) => {
@@ -153,7 +154,7 @@ const ImageUploadForm: React.SFC = () => {
 
   return (
     <div>
-      <form className="mt-5" onSubmit={onSubmit} id="image-upload">
+      <form onSubmit={onSubmit} id="image-upload">
         {successMessage}
         {errorMessage}
         {loadingMessage}
@@ -187,9 +188,9 @@ const ImageUploadForm: React.SFC = () => {
         {tagIdInputs}
         {newTagInputs}
       </form>
-      <form className="mt-5" onSubmit={onTagsFormSubmit}>
+      <form onSubmit={onTagsFormSubmit}>
         <label htmlFor="tags">tags</label>
-        <div className="form-row">
+        <div className="form-row form-group">
           <div className="col">
             <input
               type="text"
@@ -209,9 +210,9 @@ const ImageUploadForm: React.SFC = () => {
         </div>
         {tagBadges}
       </form>
-      <button type="submit" form="image-upload" className="btn btn-primary mt-5">submit</button>
+      <button type="submit" form="image-upload" className="btn btn-primary">submit</button>
     </div>
   );
 };
 
-export default ImageUploadForm;
+export default ImagesNew;

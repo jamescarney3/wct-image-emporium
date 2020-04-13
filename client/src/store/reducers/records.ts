@@ -2,6 +2,7 @@
 const actionTypes = {
   MERGE_RECORD: 'RECORDS::MERGE_ENTITY',
   MERGE_RECORDS: 'RECORDS::MERGE_ENTITIES',
+  DELETE_RECORD: 'RECORDS::DELETE_ENTITY',
 };
 
 const initialState = {
@@ -21,6 +22,12 @@ const recordsReducer = (state = initialState, action) => {
 
     case actionTypes.MERGE_RECORD:
       return { ...state, [recordType]: { ...state[recordType], [data.id]: data }};
+
+    case actionTypes.DELETE_RECORD:
+      const newRecords = Object.entries(state[recordType]).reduce((acc, [id, record]) => {
+        return id === data.id ? { ...acc, [id]: record } : acc;
+      }, {});
+      return { ...state, [recordType]: newRecords };
 
     default:
       return state;
