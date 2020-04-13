@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     get 'images/sample', to: 'images#sample', as: :sample
     get 'images/random', to: 'images#random', as: :random
-    resources :images, only: [:index, :show, :create, :destroy]
+    resources :images, only: [:index, :show, :create, :destroy, :update]
     resources :tags, only: [:index, :create, :destroy, :edit, :update]
     resources :image_tags, only: [:create, :destroy]
   end

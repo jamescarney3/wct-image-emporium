@@ -25,11 +25,36 @@ class Api::ImagesController < ApplicationController
 
     if params[:new_tags]
       params[:new_tags].each do |label|
-        @image.tags << Tag.new(label: label, value: label.sub(/[^a-zA-Z0-9]/, '').downcase, admin: current_user)
+        @image.tags << Tag.new(label: label, value: label.gsub(/[^a-zA-Z0-9]/, '').downcase, admin: current_user)
       end
     end
 
     if @image.save
+      render :show, status: 200
+    else
+      render json: { error: '422 unprocessable entity' }, status: 422
+    end
+  end
+
+  def update
+    @image = Image.find params[:id]
+
+    tags = []
+    if params[:tag_ids]
+      params[:tag_ids].each do |id|
+        tags << Tag.find(id.to_i)
+      end
+    end
+
+    puts params[:tag_ids]
+
+    if params[:new_tags]
+      params[:new_tags].each do |label|
+        tags << Tag.new(label: label, value: label.gsub(/[^a-zA-Z0-9]/, '').downcase, admin: current_user)
+      end
+    end
+
+    if @image.update(tags: tags, title: image_params[:title])
       render :show, status: 200
     else
       render json: { error: '422 unprocessable entity' }, status: 422
