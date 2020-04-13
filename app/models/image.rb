@@ -8,6 +8,8 @@ class Image < ApplicationRecord
   has_many :image_tags, dependent: :destroy
   has_many :tags, through: :image_tags
 
+  scope :for_user, lambda { |user| where(admin: user) }
+
   private
 
     def asset_must_be_attached

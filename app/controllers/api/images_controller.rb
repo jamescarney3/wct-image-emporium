@@ -4,6 +4,7 @@ class Api::ImagesController < ApplicationController
 
   def index
     @images = Image.all
+    @images = @images.for_user(current_user) if params[:admin]
     render :index, status: 200
   end
 
@@ -32,6 +33,15 @@ class Api::ImagesController < ApplicationController
       render :show, status: 200
     else
       render json: { error: '422 unprocessable entity' }, status: 422
+    end
+  end
+
+  def destroy
+    @image = Image.find params[:id]
+    if @image.destroy
+      render :show, status: 200
+    else
+      render json: { errors: '400 bad request' }, status: 400
     end
   end
 
