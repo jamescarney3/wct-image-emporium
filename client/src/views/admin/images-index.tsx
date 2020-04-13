@@ -16,7 +16,7 @@ const ImagesIndex = () => {
   if (adminImages.loading) { return (<div>loading...</div>); }
 
   return (
-    <div className="container">
+    <div className="container mt-3">
       <ImagePage images={imagesCollection(adminImages.data)} admin />
     </div>
   );

@@ -32,6 +32,17 @@ const post = (url, body) => {
   });
 };
 
+const put = (url, body) => {
+  return fetch(url, {
+    body,
+    credentials: 'same-origin',
+    headers: { 'X-CSRF-Token': CSRF_TOKEN },
+    method: 'PUT',
+  }).then((res) => {
+    return res.ok ? res.json() : handleFetchError(res);
+  });
+};
+
 const get = (url, params = {}) => {
   return fetch(url + encodeQString(params), {
     credentials: 'same-origin',
@@ -52,4 +63,4 @@ const destroy = (url) => {
   });
 };
 
-export { get, post, destroy, injectNamespace, encodeQString };
+export { get, post, put, destroy, injectNamespace, encodeQString };

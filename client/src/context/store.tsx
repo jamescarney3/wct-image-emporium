@@ -50,8 +50,15 @@ const useAccessors = () => {
     },
     imageDetail: (imageId) => {
       const image = store.getState().records.images[imageId];
+      if (!image) { return null; }
       const tags = image ? image.tag_ids.map((tagId) => store.getState().records.tags[tagId]) : [];
       return { ...image, tags };
+    },
+    tagsIndex: () => {
+      return Object.values(store.getState().records.tags);
+    },
+    tagDetail: (id) => {
+      return store.getState().records.tags[id] || null;
     },
   };
 };

@@ -3,7 +3,7 @@ import React from 'react';
 
 const AdminHome = () => {
   return (
-    <div>[[ account settings under constructions ]]</div>
+    <div className="mt-3">[[ account settings under constructions ]]</div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { get, post, destroy, injectNamespace } from './utils';
+import { get, post, destroy, put, injectNamespace } from './utils';
 import { actionTypes as recordsActionTypes } from './records';
 
 const actionTypes = {
@@ -65,6 +65,19 @@ const actionCreatorsFactory = (namespace?: string) => ({
       dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
       dispatch({ type: recordsActionTypes.MERGE_RECORD, recordType: 'images', data: rest });
       dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data: [rest] });
+    }).catch((err) => {
+      dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
+    });
+  },
+  update: (id, formData) => (dispatch) => {
+    dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
+    put(
+      `/api/images/${id}`, formData,
+    ).then((data) => {
+      const { tags, ...rest } = data;
+      dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
+      dispatch({ type: recordsActionTypes.MERGE_RECORD, recordType: 'images', data: rest });
+      dispatch({ type: injectNamespace(actionTypes.UPDATE, namespace), data });
     }).catch((err) => {
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
     });

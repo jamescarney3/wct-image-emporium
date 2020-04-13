@@ -25,9 +25,9 @@ const ImagesDelete = () => {
     destroy(id);
   };
 
-  const mainContent = (!deleted &&
+  const mainContent = (!deleted && !!image &&
     <>
-      <h2 className="mt-3">HOLD UP</h2>
+      <h2>HOLD UP</h2>
       <p>
         Are you sure you want to delete this image?
       </p>
@@ -48,7 +48,7 @@ const ImagesDelete = () => {
   );
 
   return (
-    <div className="container">
+    <div className="container mt-3">
       <div className="row">
         <div className="col-lg-9">
           <form onSubmit={onFormSubmit}>
