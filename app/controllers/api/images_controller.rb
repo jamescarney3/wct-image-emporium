@@ -1,6 +1,7 @@
 class Api::ImagesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  before_action :require_logged_in, only: [:create]
+  before_action :require_logged_in, only: [:create, :update, :destroy]
+  before_action :ensure_owner, only: [:update, :destroy]
 
   def index
     @images = Image.all
@@ -96,5 +97,11 @@ class Api::ImagesController < ApplicationController
 
     def record_not_found
       render json: { errors: '404 image record not found' }, status: 404
+    end
+
+    def ensure_owner
+      if Image.find(params[:id]).admin != current_user
+        render json: { errors: '401 user not record owner' }, status: 401
+      end
     end
 end
