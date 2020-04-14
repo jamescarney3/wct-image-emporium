@@ -66,7 +66,7 @@ const actionCreatorsFactory = (namespace?: string) => ({
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
     });
   },
-  clean: () => ({ type: injectNamespace(actionTypes.CLEAN, namespace) }),
+  clear: () => ({ type: injectNamespace(actionTypes.CLEAN, namespace) }),
 });
 
 

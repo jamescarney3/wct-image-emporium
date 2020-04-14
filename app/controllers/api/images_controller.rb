@@ -4,6 +4,7 @@ class Api::ImagesController < ApplicationController
 
   def index
     @images = Image.all
+    @images = @images.for_user(current_user) if params[:admin]
     render :index, status: 200
   end
 
@@ -24,7 +25,7 @@ class Api::ImagesController < ApplicationController
 
     if params[:new_tags]
       params[:new_tags].each do |label|
-        @image.tags << Tag.new(label: label, value: label.sub(/[^a-zA-Z0-9]/, '').downcase, admin: current_user)
+        @image.tags << Tag.new(label: label, value: label.gsub(/[^a-zA-Z0-9]/, '').downcase, admin: current_user)
       end
     end
 
@@ -32,6 +33,58 @@ class Api::ImagesController < ApplicationController
       render :show, status: 200
     else
       render json: { error: '422 unprocessable entity' }, status: 422
+    end
+  end
+
+  def update
+    @image = Image.find params[:id]
+
+    tags = []
+    if params[:tag_ids]
+      params[:tag_ids].each do |id|
+        tags << Tag.find(id.to_i)
+      end
+    end
+
+    puts params[:tag_ids]
+
+    if params[:new_tags]
+      params[:new_tags].each do |label|
+        tags << Tag.new(label: label, value: label.gsub(/[^a-zA-Z0-9]/, '').downcase, admin: current_user)
+      end
+    end
+
+    if @image.update(tags: tags, title: image_params[:title])
+      render :show, status: 200
+    else
+      render json: { error: '422 unprocessable entity' }, status: 422
+    end
+  end
+
+  def destroy
+    @image = Image.find params[:id]
+    if @image.destroy
+      render :show, status: 200
+    else
+      render json: { errors: '400 bad request' }, status: 400
+    end
+  end
+
+  def random
+    @image = Image.offset(rand(Image.count)).first
+    if !@image.nil?
+      render :show, status: 200
+    else
+      render json: { errors: '418 i\'m a teapot' }, status: 418
+    end
+  end
+
+  def sample
+    @images = Image.where(id: Image.pluck(:id).sample(params[:count].to_i || 12))
+    if !@images.nil?
+      render :index, status: 200
+    else
+      render json: { errors: '418 i\'m a teapot' }, status: 418
     end
   end
 

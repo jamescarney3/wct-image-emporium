@@ -11,7 +11,7 @@ const initialState = {
   signedIn: !!(window as any).wctAuthenticated,
 };
 
-// at least we're cleaning up after ourselves
+// at least we're clearing up after ourselves
 delete (window as any).wctAuthenticated;
 
 const userReducer = (state = initialState, action): {} => {

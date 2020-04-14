@@ -1,0 +1,7 @@
+.image-form {
+  .custom-file-label {
+    &::after {
+      content: 'browse';
+    }
+  }
+}

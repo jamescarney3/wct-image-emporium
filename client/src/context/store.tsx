@@ -41,6 +41,28 @@ const useStore = (key?: string) => {
   ];
 };
 
+const useAccessors = () => {
+  const value = useContext(StoreContext);
+
+  return {
+    imagesCollection: (imageIds) => {
+      return imageIds.map((id) => store.getState().records.images[id]);
+    },
+    imageDetail: (imageId) => {
+      const image = store.getState().records.images[imageId];
+      if (!image) { return null; }
+      const tags = image ? image.tag_ids.map((tagId) => store.getState().records.tags[tagId]) : [];
+      return { ...image, tags };
+    },
+    tagsIndex: () => {
+      return Object.values(store.getState().records.tags);
+    },
+    tagDetail: (id) => {
+      return store.getState().records.tags[id] || null;
+    },
+  };
+};
+
 
 // HOF to connect a component to the store via a consumer, optionally takes a
 // key str like the hook above
@@ -65,5 +87,5 @@ const connectStore = (key?: string) => (TargetComponent) => {
 
 const StoreConsumer = StoreContext.Consumer;
 
-export { StoreConsumer, StoreProvider, useStore, connectStore };
+export { StoreConsumer, StoreProvider, useStore, useAccessors, connectStore };
 export default StoreContext;
