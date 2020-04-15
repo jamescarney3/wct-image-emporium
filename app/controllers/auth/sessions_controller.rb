@@ -1,3 +1,5 @@
+require 'pp'
+
 class Auth::SessionsController < ApplicationController
   def create
     @user = User.from_uid request.env['omniauth.auth'].uid.to_i
@@ -22,6 +24,6 @@ class Auth::SessionsController < ApplicationController
   # temporary response behavior until this is better planned
   def destroy
     log_out! if !current_user.nil?
-    redirect_to root_url, status: 303
+    render json: {}
   end
 end

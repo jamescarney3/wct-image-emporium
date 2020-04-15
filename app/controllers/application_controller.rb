@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  skip_before_action :verify_authenticity_token if ENV['RAILS_ENV'] != 'production'
+
   def current_user
     return nil if not cookies[:session_token]
     User.find_by session_token: cookies[:session_token]
