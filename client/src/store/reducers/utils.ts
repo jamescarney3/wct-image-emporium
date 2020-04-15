@@ -1,5 +1,13 @@
+const headers = process.env.NODE_ENV === 'production' && {
+  'X-CSRF-Token': (document.getElementsByName('csrf-token')[0] as any).content,
+};
 
-const CSRF_TOKEN = (document.getElementsByName('csrf-token')[0] as any).content;
+const credentials = process.env.NODE_ENV === 'production' && ('same-origin' as RequestCredentials);
+
+const FETCH_OPTIONS = {
+  ...headers,
+  ...(credentials ? { credentials } : null),
+};
 
 const handleFetchError = (res) => {
   if (!res.ok) {
@@ -23,10 +31,7 @@ const encodeQString = (params) => {
 
 const post = (url, body) => {
   return fetch(url, {
-    body,
-    credentials: 'same-origin',
-    headers: { 'X-CSRF-Token': CSRF_TOKEN },
-    method: 'POST',
+    ...FETCH_OPTIONS, body, method: 'POST',
   }).then((res) => {
     return res.ok ? res.json() : handleFetchError(res);
   });
@@ -34,10 +39,7 @@ const post = (url, body) => {
 
 const put = (url, body) => {
   return fetch(url, {
-    body,
-    credentials: 'same-origin',
-    headers: { 'X-CSRF-Token': CSRF_TOKEN },
-    method: 'PUT',
+    ...FETCH_OPTIONS, body, method: 'PUT',
   }).then((res) => {
     return res.ok ? res.json() : handleFetchError(res);
   });
@@ -45,9 +47,7 @@ const put = (url, body) => {
 
 const get = (url, params = {}) => {
   return fetch(url + encodeQString(params), {
-    credentials: 'same-origin',
-    headers: { 'X-CSRF-Token': CSRF_TOKEN },
-    method: 'GET',
+    ...FETCH_OPTIONS, method: 'GET',
   }).then((res) => {
     return res.ok ? res.json() : handleFetchError(res);
   });
@@ -55,9 +55,7 @@ const get = (url, params = {}) => {
 
 const destroy = (url) => {
   return fetch(url, {
-    credentials: 'same-origin',
-    headers: { 'X-CSRF-Token': CSRF_TOKEN },
-    method: 'DELETE',
+    ...FETCH_OPTIONS, method: 'DELETE',
   }).then((res) => {
     return res.ok ? res.json() : handleFetchError(res);
   });

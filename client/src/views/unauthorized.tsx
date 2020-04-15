@@ -1,9 +1,11 @@
 import React from 'react';
 
+import { RAILS_ASSET_BASE } from '~/constants';
+
 
 const Unauthorized: React.FC = () => {
   const robIdx = Math.floor(Math.random() * Math.floor(3)) + 1;
-  const robPath = `/timelord-block-${robIdx}.jpg`;
+  const robPath = `${RAILS_ASSET_BASE}timelord-block-${robIdx}.jpg`;
 
   return (
     <div className="container">
