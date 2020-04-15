@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 
-const fileEnvKeys = Object.entries(dotenv.config().parsed);
+const fileEnvKeys = Object.entries(dotenv.config().parsed || {});
 
 module.exports = (env) => {
   const cliEnvKeys = Object.entries(env || {});
