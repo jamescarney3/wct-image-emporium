@@ -8,7 +8,6 @@ const headers = (() => {
   if (process.env.NODE_ENV !== 'production') { return null; }
   return ({
     'X-CSRF-Token': csrfToken,
-    // 'Content-Type': 'application/json',
   });
 })();
 
@@ -62,11 +61,7 @@ const get = (url, params = {}) => {
 
 const destroy = (url) => {
   return fetch(url, {
-    method: 'DELETE',
-    headers: {
-      'X-CSRF-Token': csrfToken,
-      'Content-Type': 'application/json',
-    },
+    ...FETCH_OPTIONS, method: 'DELETE',
   }).then((res) => {
     return res.ok ? res.json() : handleFetchError(res);
   });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, RouteProps, Redirect, RouteComponentProps } from 'react-router';
+import { Route, RouteProps, Redirect } from 'react-router';
 
 import { useStore } from '~/context/store';
 

@@ -1,5 +1,3 @@
-require 'pp'
-
 class Auth::SessionsController < ApplicationController
   def create
     @user = User.from_uid request.env['omniauth.auth'].uid.to_i

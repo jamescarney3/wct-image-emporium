@@ -39,7 +39,7 @@ const Admin = ({ match }) => {
             <Route path={`${match.path}/images/:id/delete`} component={ImagesDelete} />
             <Route path={`${match.path}/images/new`} component={ImagesNew} />
             <Route path={`${match.path}/images`} component={ImagesIndex} />
-            <Route path={`${match.path}`} exact component={Home} />
+            <Route path={`${match.path}`} component={Home} />
           </Switch>
         </div>
       </div>
