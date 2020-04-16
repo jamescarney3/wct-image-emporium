@@ -25,7 +25,5 @@ const actionCreators = {
   user: bindActionCreators(userActionCreators, store.dispatch),
 };
 
-(window as any).store = store;
-
 export { actionCreators };
 export default store;

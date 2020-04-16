@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, Switch, Route } from 'react-router-dom';
 
+import { useStore } from '~/context/store';
+
 import Home from './admin-home';
 import ImagesIndex from './images-index';
 import ImagesEdit from './images-edit';
@@ -9,6 +11,9 @@ import ImagesDelete from './images-delete';
 
 
 const Admin = ({ match }) => {
+  const [user, userActionCreators] = useStore('user');
+  const { signOut } = userActionCreators;
+
   return (
     <div className="container">
       <div className="row">
@@ -22,6 +27,9 @@ const Admin = ({ match }) => {
             </li>
             <li className="list-group-item">
               <Link to={`${match.path}/images/new`}>upload image</Link>
+            </li>
+            <li className="list-group-item">
+              <button className="btn btn-link p-0" onClick={signOut}>log out</button>
             </li>
           </ul>
         </div>

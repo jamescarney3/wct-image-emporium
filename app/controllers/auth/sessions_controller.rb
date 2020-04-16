@@ -22,6 +22,6 @@ class Auth::SessionsController < ApplicationController
   # temporary response behavior until this is better planned
   def destroy
     log_out! if !current_user.nil?
-    redirect_to root_url, status: 303
+    render json: {}
   end
 end

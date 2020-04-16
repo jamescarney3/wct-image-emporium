@@ -8,14 +8,20 @@ interface IAuthRoute extends RouteProps {
   redirectTo?: string;
 }
 
-const AuthRoute: React.SFC<IAuthRoute> = ({ children, redirectTo, ...rest }) => {
+const AuthRoute: React.SFC<IAuthRoute> = ({ redirectTo, ...rest }) => {
 
   const [user] = useStore('user');
 
+  if (!user.pending && !user.signedIn) {
+    return (<Redirect to={redirectTo || '/'} />);
+  }
+
+  if (user.pending) {
+    return (<div>loading...</div>);
+  }
+
   return (
-    <Route {...rest}>
-      {user.signedIn ? children : <Redirect to={redirectTo || '/'} />}
-    </Route>
+    <Route {...rest} />
   );
 };
 

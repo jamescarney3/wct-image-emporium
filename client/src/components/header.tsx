@@ -8,15 +8,12 @@ interface IHeaderProps {
   signedIn?: boolean;
 }
 
-const SIGNED_IN_TEXT = 'admin tools';
-const NOT_SIGNED_IN_TEXT = 'admin login';
-
-const SIGNED_IN_PATH = '/admin/home';
-const NOT_SIGNED_IN_PATH = '/auth/twitter';
-
 const Header: React.FC<IHeaderProps> = () => {
   const [user] = useStore('user');
   const { signedIn } = user;
+
+  const signInLink = (<a href="/auth/twitter">admin login</a>);
+  const adminLink = (<Link to="/admin">admin tools</Link>);
 
   return (
     <nav className="container navbar navbar-expand-lg navbar-dark bg-dark">
@@ -43,9 +40,7 @@ const Header: React.FC<IHeaderProps> = () => {
           </div>
         </form>
         <div className="navbar-navitem my-3 ml-lg-3 flex-grow-2">
-          <a href={signedIn ? SIGNED_IN_PATH : NOT_SIGNED_IN_PATH}>
-            {signedIn ? SIGNED_IN_TEXT : NOT_SIGNED_IN_TEXT}
-          </a>
+          {signedIn ? adminLink : signInLink}
         </div>
       </div>
     </nav>
