@@ -2,6 +2,7 @@ class User < ApplicationRecord
   validates :uid, presence: true, uniqueness: true
 
   after_initialize :ensure_session_token
+  serialize :historical_screen_names, Array
 
   # generate new token, set on user, save user, and return token
   def reset_token!
@@ -15,9 +16,25 @@ class User < ApplicationRecord
     where(uid: uid).first || create_from_uid(uid)
   end
 
+  def self.from_auth(uid:, screen_name:)
+    user = User.find_by(uid: uid)
+    if user && user.screen_name != screen_name
+
+      user.historical_screen_names = user.historical_screen_names.concat([user.screen_name]).uniq.compact
+      user.screen_name = screen_name
+      user.save
+    end
+
+    user || create_from_auth(uid: uid, screen_name: screen_name)
+  end
+
   # create a user with a a twitter uid
   def self.create_from_uid(uid)
     create(uid: uid) if ADMIN_IDS.include? uid
+  end
+
+  def self.create_from_auth(uid:, screen_name:)
+    create(uid: uid, screen_name: screen_name) if ADMIN_IDS.include? uid
   end
 
   def self.generate_session_token
