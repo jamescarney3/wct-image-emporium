@@ -1,13 +1,20 @@
-const headers = process.env.NODE_ENV === 'production' && {
-  'X-CSRF-Token': (document.getElementsByName('csrf-token')[0] as any).content,
-};
+const csrfToken = (() => {
+  const tag = document.querySelector('[name=\'csrf-token\']');
+  if (!tag) { return null; }
+  return (tag as any).content;
+})();
 
-const credentials = process.env.NODE_ENV === 'production' && ('same-origin' as RequestCredentials);
+const headers = (() => {
+  if (process.env.NODE_ENV !== 'production') { return null; }
+  return ({
+    'X-CSRF-Token': csrfToken,
+    // 'Content-Type': 'application/json',
+  });
+})();
 
-const FETCH_OPTIONS = {
-  ...headers,
-  ...(credentials ? { credentials } : null),
-};
+const FETCH_OPTIONS = ({
+  ...(headers ? { headers } : null),
+} as RequestInit);
 
 const handleFetchError = (res) => {
   if (!res.ok) {
@@ -55,7 +62,11 @@ const get = (url, params = {}) => {
 
 const destroy = (url) => {
   return fetch(url, {
-    ...FETCH_OPTIONS, method: 'DELETE',
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-Token': csrfToken,
+      'Content-Type': 'application/json',
+    },
   }).then((res) => {
     return res.ok ? res.json() : handleFetchError(res);
   });

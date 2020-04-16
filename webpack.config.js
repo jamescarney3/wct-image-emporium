@@ -6,17 +6,17 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 
-const fileEnvKeys = Object.entries(dotenv.config().parsed || {});
+module.exports = () => {
+  const dotfileEnv = dotenv.config().parsed || {};
+  const combinedEnv = { ...process.env, ...dotfileEnv };
 
-module.exports = (env) => {
-  const cliEnvKeys = Object.entries(env || {});
-  const envKeys = [...fileEnvKeys, ...cliEnvKeys].reduce((acc, [k, v]) => (
+  const envKeys = Object.entries(combinedEnv).reduce((acc, [k, v]) => (
     { ...acc, [`process.env.${k}`]: JSON.stringify(v) }
   ), {});
 
   return {
     entry: './client/src/index.ts',
-    mode: 'development',
+    mode: combinedEnv.NODE_ENV || 'development',
     devtool: 'source-map',
     module: {
       rules: [
@@ -70,7 +70,7 @@ module.exports = (env) => {
     },
     devServer: {
       contentBase: path.join(__dirname, 'client/dist'),
-      port: fileEnvKeys.DEV_SERVER_PORT || 13666,
+      port: combinedEnv.DEV_SERVER_PORT || 13666,
       publicPath: '/',
       hot: true,
       headers: {
@@ -78,9 +78,9 @@ module.exports = (env) => {
       },
       historyApiFallback: true,
       proxy: {
-        '/auth': `http://localhost:${fileEnvKeys.RAILS_DEFAULT_PORT || 42069}`,
-        '/api': `http://localhost:${fileEnvKeys.RAILS_DEFAULT_PORT || 42069}`,
-        '/rails': `http://localhost:${fileEnvKeys.RAILS_DEFAULT_PORT || 42069}`,
+        '/auth': `http://localhost:${combinedEnv.RAILS_DEFAULT_PORT || 42069}`,
+        '/api': `http://localhost:${combinedEnv.RAILS_DEFAULT_PORT || 42069}`,
+        '/rails': `http://localhost:${combinedEnv.RAILS_DEFAULT_PORT || 42069}`,
       },
     },
     plugins: [
