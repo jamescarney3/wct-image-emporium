@@ -25,3 +25,8 @@ CATCHALL_ROUTE_CONSTRAINT = lambda do |req|
     req.path.include? path
   end
 end
+
+TWITTER_CLIENT_CONFIG = {
+  consumer_key: ENV["TWITTER_KEY"],
+  consumer_secret: ENV["TWITTER_SECRET"],
+}
