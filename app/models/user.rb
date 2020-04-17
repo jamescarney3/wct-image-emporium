@@ -18,13 +18,7 @@ class User < ApplicationRecord
 
   def self.from_auth(uid:, screen_name:)
     user = User.find_by(uid: uid)
-    if user && user.screen_name != screen_name
-
-      user.historical_screen_names = user.historical_screen_names.concat([user.screen_name]).uniq.compact
-      user.screen_name = screen_name
-      user.save
-    end
-
+    user.refresh_screen_name(screen_name) if !user.nil?
     user || create_from_auth(uid: uid, screen_name: screen_name)
   end
 
@@ -35,6 +29,13 @@ class User < ApplicationRecord
 
   def self.create_from_auth(uid:, screen_name:)
     create(uid: uid, screen_name: screen_name) if ADMIN_IDS.include? uid
+  end
+
+  def refresh_screen_name(new_screen_name)
+    if screen_name.downcase != new_screen_name.downcase
+      self.historical_screen_names = historical_screen_names.concat([screen_name]).uniq.compact
+      self.screen_name = new_screen_name
+    end
   end
 
   def self.generate_session_token
