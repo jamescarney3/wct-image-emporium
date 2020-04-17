@@ -1,6 +1,11 @@
 class Auth::SessionsController < ApplicationController
   def create
     @user = User.from_uid request.env['omniauth.auth'].uid.to_i
+
+    uid = request.env['omniauth.auth'].uid.to_i
+    screen_name = request.env['omniauth.auth'].info.nickname
+    @enhanced_user = User.from_auth uid: uid, screen_name: screen_name.downcase
+
     if @user.nil?
       redirect_to :unauthorized
     else
@@ -17,6 +22,16 @@ class Auth::SessionsController < ApplicationController
     else
       render json: @user
     end
+  end
+
+  def refresh
+    client = Twitter::REST::Client.new(TWITTER_CLIENT_CONFIG)
+    @user = current_user
+
+    profile = client.user(@user.uid.to_i)
+    @user.refresh_screen_name(profile.screen_name.downcase)
+
+    render :show
   end
 
   # temporary response behavior until this is better planned
