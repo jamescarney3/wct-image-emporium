@@ -11,20 +11,10 @@ class User < ApplicationRecord
     self.session_token
   end
 
-  # find or create a user from a twitter uid
-  def self.from_uid(uid)
-    where(uid: uid).first || create_from_uid(uid)
-  end
-
   def self.from_auth(uid:, screen_name:)
     user = User.find_by(uid: uid)
     user.refresh_screen_name(screen_name) if !user.nil?
     user || create_from_auth(uid: uid, screen_name: screen_name)
-  end
-
-  # create a user with a a twitter uid
-  def self.create_from_uid(uid)
-    create(uid: uid) if ADMIN_IDS.include? uid
   end
 
   def self.create_from_auth(uid:, screen_name:)
