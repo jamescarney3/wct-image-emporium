@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_05_021953) do
+ActiveRecord::Schema.define(version: 2020_04_16_182235) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -62,6 +65,8 @@ ActiveRecord::Schema.define(version: 2020_03_05_021953) do
     t.string "session_token"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "screen_name"
+    t.string "historical_screen_names"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

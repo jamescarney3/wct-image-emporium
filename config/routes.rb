@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   # in the default configs of the omniauth gem/middleware. sessions routes are
   # specified here for organizational reasons and provisionally deal with token
   # management
-  namespace :auth do
+  namespace :auth, defaults: { format: :json } do
+    get ':sessions/refresh', to: 'sessions#refresh', as: :refresh
     resource :sessions, only: [:show, :destroy], defaults: { format: :json }
     get ':provider/callback', to: 'sessions#create', as: :callback
     get 'failure', to: 'static_pages#root', as: :failure

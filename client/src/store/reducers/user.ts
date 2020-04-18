@@ -17,6 +17,7 @@ const asyncBase = {
 // DOM is ugly, so sue me
 const initialState = {
   ...asyncBase,
+  data: null,
   signedIn: !!(window as any).wctAuthenticated,
   pending: !(window as any).wctAuthenticated,
 };
@@ -31,9 +32,9 @@ const userReducer = (state = initialState, action): {} => {
     case actionTypes.ERROR:
       return { ...state, ...asyncBase, error: action.error };
     case actionTypes.SIGN_IN:
-      return { ...state, ...asyncBase, signedIn: true };
+      return { ...state, ...asyncBase, signedIn: true, data: action.data };
     case actionTypes.SIGN_OUT:
-      return { ...state, ...asyncBase, signedIn: false };
+      return { ...state, ...asyncBase, signedIn: false, data: null };
     case actionTypes.CLEAR:
       return { ...state, ...asyncBase };
     default:
@@ -59,7 +60,7 @@ const userActionCreators = {
       '/auth/sessions',
     ).then((res) => {
       if (res.id) {
-        dispatch({ type: actionTypes.SIGN_IN });
+        dispatch({ type: actionTypes.SIGN_IN, data: res });
       } else {
         dispatch({ type: actionTypes.CLEAR });
       }
