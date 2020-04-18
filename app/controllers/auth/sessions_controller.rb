@@ -18,7 +18,7 @@ class Auth::SessionsController < ApplicationController
     if @user.nil?
       render json: {}
     else
-      render json: @user
+      render :show
     end
   end
 

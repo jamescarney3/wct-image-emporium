@@ -1,1 +1,3 @@
-json.(@user, :id, :screen_name)
+json.(@user, :id)
+json.screen_name "@#{@user.screen_name}"
+json.url "http://twitter.com/#{@user.screen_name}"
