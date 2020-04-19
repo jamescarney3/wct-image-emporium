@@ -10,6 +10,7 @@ import userReducer, { userActionCreators } from './reducers/user';
 const reducers = {
   adminImages: imagesReducerFactory('ADMIN'),
   images: imagesReducerFactory(),
+  randomImages: imagesReducerFactory('RANDOM'),
   allTags: tagsReducerFactory('ALL'),
   records: recordsReducer,
   user: userReducer,
@@ -20,6 +21,7 @@ const store = createStore(combineReducers(reducers), applyMiddleware(thunk));
 const actionCreators = {
   adminImages: bindActionCreators(imagesACF('ADMIN'), store.dispatch),
   images: bindActionCreators(imagesACF(), store.dispatch),
+  randomImages: bindActionCreators(imagesACF('RANDOM'), store.dispatch),
   allTags: bindActionCreators(tagsACF('ALL'), store.dispatch),
   records: bindActionCreators(recordsActionCreators, store.dispatch),
   user: bindActionCreators(userActionCreators, store.dispatch),

@@ -23,7 +23,7 @@ const ImagePage: React.SFC<IImagePage> = ({ images, admin }) => {
 
   const renderImagePanel = (image) => {
     return (
-      <div className="col-lg-6 my-3" key={`image-panel-${image.id}`}>
+      <div className="col-lg-3 my-3" key={`image-panel-${image.id}`}>
         <ImagePanel image={image} />
         {renderAdminControls(image)}
       </div>
