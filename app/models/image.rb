@@ -8,7 +8,7 @@ class Image < ApplicationRecord
   has_many :image_tags, dependent: :destroy
   has_many :tags, through: :image_tags
 
-  scope :for_user, lambda { |user| where admin: user }
+  scope :for_user, lambda { |user_id| where user_id: user_id }
   scope :with_tags, lambda { |*tag_ids| where id: Image.get_ids_for_tags(*tag_ids) }
 
   private
