@@ -10,6 +10,7 @@ class Image < ApplicationRecord
 
   scope :for_user, lambda { |user_id| where user_id: user_id }
   scope :with_tags, lambda { |*tag_ids| where id: Image.get_ids_for_tags(*tag_ids) }
+  scope :between, lambda { |before:, after:| where created_at: (after..before) }
 
   private
 

@@ -6,6 +6,11 @@ class Api::ImagesController < ApplicationController
   def index
     @images = Image.all
     @images = @images.with_tags(*params[:f][:tags].split.map(&:to_i)) if params[:f][:tags]
+    if params[:f][:before] || params[:f][:after]
+      after = params[:f][:after] ? Time.strptime(params[:f][:after], "%Y%m%d") : Time.new(0)
+      before = params[:f][:before] ? Time.strptime(params[:f][:before], "%Y%m%d") : Time.now
+      @images = @images.between(after: after, before: before)
+    end
     @images = @images.for_user(params[:f][:user]) if params[:f][:user]
     @images = @images.for_user(current_user.id) if params[:admin]
     render :index, status: 200
