@@ -21,6 +21,7 @@ const Random = () => {
 
   return (
     <div>
+      [[ refresh button pending ]]
       {image && <ImageDetail image={image} />}
     </div>
   );

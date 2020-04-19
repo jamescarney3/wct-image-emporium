@@ -19,6 +19,7 @@ const ImagesHome = () => {
 
   return (
     <div>
+      [[ filter component pending ]]
       <ImagePage images={imagesCollection(images.data)} />
     </div>
   );

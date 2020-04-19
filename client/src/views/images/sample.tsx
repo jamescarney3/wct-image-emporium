@@ -18,6 +18,8 @@ const Sample = () => {
 
   return (
     <div>
+      [[ filter component pending ]]
+      [[ refresh button pending ]]
       <ImagePage images={imagesCollection(images.data)} />
     </div>
   );
