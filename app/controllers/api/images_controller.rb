@@ -5,6 +5,7 @@ class Api::ImagesController < ApplicationController
 
   def index
     @images = Image.all
+    @images = @images.with_tags(*params[:f][:tags].split.map(&:to_i)) if params[:f][:tags]
     @images = @images.for_user(current_user) if params[:admin]
     render :index, status: 200
   end
