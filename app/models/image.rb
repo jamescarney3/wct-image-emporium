@@ -8,8 +8,8 @@ class Image < ApplicationRecord
   has_many :image_tags, dependent: :destroy
   has_many :tags, through: :image_tags
 
-  scope :for_user, lambda { |user| where(admin: user) }
-  scope :with_tags, lambda { |*tag_ids| find_by_sql generate_tags_query(*tag_ids) }
+  scope :for_user, lambda { |user| where admin: user }
+  scope :with_tags, lambda { |*tag_ids| where id: Image.get_ids_for_tags(*tag_ids) }
 
   private
 
@@ -19,16 +19,9 @@ class Image < ApplicationRecord
       end
     end
 
-    def self.generate_tags_query(*ids)
-      "
-        SELECT * FROM images
-        INNER JOIN (
-          SELECT s1images.id, count(s1tags) FROM images AS s1images
-          INNER JOIN image_tags ON s1images.id = image_tags.image_id
-          INNER JOIN tags AS s1tags ON image_tags.tag_id = s1tags.id
-          WHERE s1tags.id IN (#{ids.join(',')}) GROUP BY s1images.id
-        ) AS matched_images ON images.id = matched_images.id
-        WHERE count = #{ids.count};
-      "
+    def self.get_ids_for_tags(*tag_ids)
+      Image.joins(image_tags: :tag).where(tags: { id: tag_ids }).group(:id).count.select {
+        |k, v| v == tag_ids.count
+      }.keys
     end
 end
