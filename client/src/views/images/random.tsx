@@ -17,12 +17,23 @@ const Random = () => {
 
   const image = imageDetail(images.data[0]);
 
-  if (images.loading) { return (<div>loading...</div>); }
+  const renderContent = () => {
+    if (images.loading) { return (<div>loading...</div>); }
+    if (images.error) { return (<div>error fetching page data!</div>); }
+    return (image && <ImageDetail image={image} />);
+  };
+
+
 
   return (
     <div>
-      [[ refresh button pending ]]
-      {image && <ImageDetail image={image} />}
+      <div className="mt-3 clearfix">
+        <h2 className="float-left">random artifact:</h2>
+        <button className="btn btn-primary btn-sm float-right" onClick={random}>
+          refresh
+        </button>
+      </div>
+      {renderContent()}
     </div>
   );
 };

@@ -85,7 +85,7 @@ const actionCreatorsFactory = (namespace?: string) => ({
   random: (id) => (dispatch) => {
     dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
     get(
-      `/api/images/random`,
+      `/api/images/random?limit=8`,
     ).then((data) => {
       const { tags, ...rest } = data;
       dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
@@ -113,10 +113,10 @@ const actionCreatorsFactory = (namespace?: string) => ({
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
     });
   },
-  sample: () => (dispatch) => {
+  sample: (params) => (dispatch) => {
     dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
     get(
-      '/api/images/sample?count=12',
+      '/api/images/sample', params,
     ).then((data) => {
       const { images, tags } = data.reduce((acc, image) => {
         const { tags: tagRecords, ...rest } = image;

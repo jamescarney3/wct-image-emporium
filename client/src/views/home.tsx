@@ -15,8 +15,8 @@ const Home = () => {
   useEffect(() => {
     recentClear();
     randomClear();
-    index();
-    sample();
+    index({ limit: 8 });
+    sample({ limit: 8 });
     return () => {
       recentClear();
       randomClear();

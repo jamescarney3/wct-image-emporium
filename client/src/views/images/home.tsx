@@ -1,26 +1,75 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
+import SearchParamsContext from '~/context/search-params';
 import { useStore, useAccessors } from '~/context/store';
-import { ImagePage } from '~/components';
+import { ImagePage, TagFilter } from '~/components';
 
 
 const ImagesHome = () => {
   const [images, imagesActionCreators] = useStore('images');
   const { index, clear } = imagesActionCreators;
-  const { imagesCollection } = useAccessors();
+  const [allTags, allTagsActionCreators] = useStore('allTags');
+  const { index: tagsIndex } = allTagsActionCreators;
+  const { serverParams, dataParams, setParam, unsetParam, ready } = useContext(SearchParamsContext);
 
+  const { imagesCollection, convertQString, tagsCollection, tagsCollectionByValue } = useAccessors();
+
+  const { search } = useLocation();
 
   useEffect(() => {
-    index();
+    clear();
+    tagsIndex();
     return clear;
   }, []);
 
-  if (images.loading) { return (<div>loading...</div>); }
+  useEffect(() => {
+    if (!search) {
+      index();
+    } else if (ready) {
+      index(serverParams);
+    }
+  }, [serverParams.toString()]);
+
+  const handleAddTag = (tag) => {
+    const paramTags = dataParams['f[tags]'] || [];
+    setParam('f[tags]', [...paramTags, tag.value]);
+  };
+
+  const handleRemoveTag = (tag) => {
+    const paramTags = dataParams['f[tags]'];
+    if (paramTags.length === 1) {
+      unsetParam('f[tags]');
+    } else {
+      setParam('f[tags]', paramTags.filter((paramTag) => paramTag !== tag.value));
+    }
+  };
+
+  const renderContent = () => {
+    if (images.loading || allTags.loading) { return (<div>loading...</div>); }
+    if (images.error || allTags.error) { return (<div>error loading page data!</div>); }
+    return (
+      <div>
+        <div className="row">
+          <ImagePage images={imagesCollection(images.data)} />
+        </div>
+        <h3>filter by tag:</h3>
+        <TagFilter
+          tags={tagsCollection(allTags.data)}
+          paramTags={tagsCollectionByValue(dataParams['f[tags]'])}
+          onAdd={handleAddTag}
+          onRemove={handleRemoveTag}
+        />
+      </div>
+    );
+  };
 
   return (
-    <div>
-      [[ filter component pending ]]
-      <ImagePage images={imagesCollection(images.data)} />
+    <div className="my-3">
+      <div className="clearfix">
+        <h2 className="float-left">artifacts:</h2>
+      </div>
+      {renderContent()}
     </div>
   );
 };

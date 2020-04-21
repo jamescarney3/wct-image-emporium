@@ -28,11 +28,8 @@ const injectNamespace = (actionType: string, namespace?: string, delimiter: stri
   return `${prefix}${actionType}`;
 };
 
-const encodeQString = (params) => {
-  const queryString = Object.keys(params).map((key) => (
-    `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
-  )).join('&');
-  return queryString ? `?${queryString}` : '';
+const constructUrl = (url, params) => {
+  return params ? [url, params].join('?') : url;
 };
 
 const post = (url, body) => {
@@ -51,8 +48,8 @@ const put = (url, body) => {
   });
 };
 
-const get = (url, params = {}) => {
-  return fetch(url + encodeQString(params), {
+const get = (url, params = '') => {
+  return fetch(params ? [url, params].join('?') : url, {
     ...FETCH_OPTIONS, method: 'GET',
   }).then((res) => {
     return res.ok ? res.json() : handleFetchError(res);
@@ -67,4 +64,4 @@ const destroy = (url) => {
   });
 };
 
-export { get, post, put, destroy, injectNamespace, encodeQString };
+export { get, post, put, destroy, injectNamespace, constructUrl };

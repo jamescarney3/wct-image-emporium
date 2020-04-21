@@ -17,7 +17,7 @@ const asyncBase = {
 // DOM is ugly, so sue me
 const initialState = {
   ...asyncBase,
-  data: null,
+  data: {},
   signedIn: !!(window as any).wctAuthenticated,
   pending: !(window as any).wctAuthenticated,
 };

@@ -5,4 +5,4 @@ export { default as ImagePage } from './image-page';
 export { default as ImagePanel } from './image-panel';
 export { default as ImageForm } from './image-form';
 export { default as TagBadge } from './tag-badge';
-export { default as TagInputAutocomplete } from './tag-input-autocomplete';
+export { default as TagFilter } from './tag-filter';

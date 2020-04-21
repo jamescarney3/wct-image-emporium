@@ -30,10 +30,11 @@ const ImagePage: React.SFC<IImagePage> = ({ images, admin }) => {
     );
   };
 
+
   return (
     <div className="container">
       <div className="row">
-        {images.map(renderImagePanel)}
+        {!!images.length && images.map(renderImagePanel)}
       </div>
     </div>
   );
