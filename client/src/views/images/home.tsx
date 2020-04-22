@@ -11,25 +11,26 @@ const ImagesHome = () => {
   const { index, clear } = imagesActionCreators;
   const [allTags, allTagsActionCreators] = useStore('allTags');
   const { index: tagsIndex } = allTagsActionCreators;
-  const { serverParams, dataParams, setParam, unsetParam, ready } = useContext(SearchParamsContext);
+  const { serverParams, dataParams, setParam, unsetParam } = useContext(SearchParamsContext);
 
-  const { imagesCollection, convertQString, tagsCollection, tagsCollectionByValue } = useAccessors();
+  const {
+    imagesCollection, tagsCollection, tagsCollectionByValue,
+  } = useAccessors();
 
   const { search } = useLocation();
 
   useEffect(() => {
     clear();
-    tagsIndex();
     return clear;
   }, []);
 
   useEffect(() => {
     if (!search) {
       index();
-    } else if (ready) {
+    } else if (serverParams && !images.loading && !images.data.length) {
       index(serverParams);
     }
-  }, [serverParams.toString()]);
+  }, [search, serverParams]);
 
   const handleAddTag = (tag) => {
     const paramTags = dataParams['f[tags]'] || [];

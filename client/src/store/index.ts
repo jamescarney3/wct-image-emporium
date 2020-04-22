@@ -14,9 +14,11 @@ const reducers = {
   allTags: tagsReducerFactory('ALL'),
   records: recordsReducer,
   user: userReducer,
+  lastAction: (state = null, action) => action,
 };
 
 const store = createStore(combineReducers(reducers), applyMiddleware(thunk));
+// const unsubscribe = store.subscribe(() => console.log(store.getState().lastAction));
 
 const actionCreators = {
   adminImages: bindActionCreators(imagesACF('ADMIN'), store.dispatch),

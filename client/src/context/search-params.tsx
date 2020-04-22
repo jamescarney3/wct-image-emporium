@@ -1,24 +1,38 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 
-import { useStore } from '~/context/store';
+import { useStore, useAccessors } from '~/context/store';
 
-// MOVE THIS!!
+
 interface ITag {
   id: number,
   value: string,
   label: string,
 }
 
-interface ISearchParams {
-  'f[tags]': string,
-  'limit': number,
-}
+// url query value => data value transformer
+const clientToDataParam = (v, k) => {
+  switch (k) {
+    case 'f[tags]':
+      return v.split(' ');
+    default:
+      return v;
+  }
+};
+
+// data value => url query value transformer
+const dataToClientParam = (v, k) => {
+  switch (k) {
+    case 'f[tags]':
+      return v.join('+');
+    default:
+      return v;
+  }
+};
 
 const initialState = {
   dataParams: {},
-  serverParams: new URLSearchParams(),
-  ready: false,
+  serverParams: null,
   setParam: Function.prototype,
   unsetParam: Function.prototype,
 };
@@ -26,35 +40,25 @@ const initialState = {
 const SearchParamsContext = createContext(initialState);
 
 const SearchParamsProvider = (props) => {
+  // listen to all tags store and get its methods, use store accessors
+  const [allTags] = useStore('allTags');
+  const { tagsCollection } = useAccessors();
+
+  // listen to router state, get history object to update location
   const { pathname, search } = useLocation();
   const routerHistory = useHistory();
-  const [records] = useStore('records');
+
+  // ergonomic representation of url search params
   const [dataParams, setDataParams] = useState(initialState.dataParams);
-  const [serverParams, setServerParams] = useState(initialState.serverParams);
+  // server mungible representation of data params
+  const [serverParams, setServerParams] = useState(null);
 
-  const clientToDataParam = (v, k) => {
+  // data value => API query value transformer
+  const dataToAPIParam = (v, k) => {
     switch (k) {
       case 'f[tags]':
-        return v.split(' ');
-      default:
-        return v;
-    }
-  };
-
-  const dataToClientParam = (v, k) => {
-    switch (k) {
-      case 'f[tags]':
-        return v.join('+');
-      default:
-        return v;
-    }
-  };
-
-  const clientToServerParam = (v, k) => {
-    switch (k) {
-      case 'f[tags]':
-        return v.split(' ').map((value) => {
-          const target = Object.values(records.tags).find((tag: ITag) => tag.value === value);
+        return v.map((value) => {
+          const target = tagsCollection(allTags.data).find((tag: ITag) => tag.value === value);
           return target && (target as ITag).id;
         }).filter((id) => !!id).join(' ');
       default:
@@ -62,22 +66,29 @@ const SearchParamsProvider = (props) => {
     }
   };
 
+  // read url search, serialize & set as state whenever it changes
   useEffect(() => {
     const newDataParams = {};
     new URLSearchParams(search).forEach((v, k) => {
       newDataParams[k] = clientToDataParam(v, k);
     });
     setDataParams(newDataParams);
-  }, []);
+  }, [search]);
 
+  // compose a new server URL search params object and set state when data params change
   useEffect(() => {
-    const newServerParams = new URLSearchParams();
-    new URLSearchParams(search).forEach((v, k) => {
-      newServerParams.append(k, clientToServerParam(v, k));
-    });
-    setServerParams(newServerParams);
-  }, [search, records.tags]);
+    const dataKeys = Object.keys(dataParams);
+    if (dataKeys.length && allTags.fetched) {
+      const newServerParams = new URLSearchParams(dataKeys.reduce((acc, el) => {
+        return { ...acc, [el]: dataToAPIParam(dataParams[el], el) };
+      }, {}));
+      setServerParams(newServerParams);
+    } else {
+      setServerParams(null);
+    }
+  }, [dataParams, allTags.fetched]);
 
+  // nice if the search string is human readable
   const generateSearchString = (params) => {
     return Object.keys(params).reduce((acc, key, idx) => {
       return `${acc}${!!idx ? '&' : ''}${key}=${dataToClientParam(params[key], key)}`;
@@ -98,9 +109,7 @@ const SearchParamsProvider = (props) => {
     routerHistory.push({ pathname, search: generateSearchString(newParams) });
   };
 
-  const ready = !!Object.values(records.tags).length;
-
-  const value = { dataParams, serverParams, ready, setParam, unsetParam };
+  const value = { dataParams, serverParams, setParam, unsetParam };
 
   return (
     <SearchParamsContext.Provider value={value}>

@@ -10,7 +10,9 @@ const Sample = () => {
   const { sample, clear } = imagesActionCreators;
   const [allTags, allTagsActionCreators] = useStore('allTags');
   const { index: tagsIndex } = allTagsActionCreators;
-  const { serverParams, dataParams, setParam, unsetParam, ready } = useContext(SearchParamsContext);
+  const {
+    dataParams, serverParams, setParam, unsetParam,
+  } = useContext(SearchParamsContext);
 
   const { imagesCollection, tagsCollection, tagsCollectionByValue } = useAccessors();
 
@@ -18,17 +20,16 @@ const Sample = () => {
 
   useEffect(() => {
     clear();
-    tagsIndex();
     return clear;
   }, []);
 
   useEffect(() => {
     if (!search) {
       sample();
-    } else if (ready) {
+    } else if (serverParams && !images.loading && !images.data.length) {
       sample(serverParams);
     }
-  }, [serverParams.toString()]);
+  }, [search, serverParams]);
 
   const handleAddTag = (tag) => {
     const paramTags = dataParams['f[tags]'] || [];

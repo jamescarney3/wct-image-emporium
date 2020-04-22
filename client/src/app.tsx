@@ -9,9 +9,11 @@ import { Unauthorized, Admin, Images, Home } from '~/views';
 
 const App: React.SFC = () => {
   const [user, userActionCreators] = useStore('user');
+  const [allTags, allTagsActionCreators] = useStore('allTags');
 
   useEffect(() => {
     userActionCreators.fetch();
+    allTagsActionCreators.index();
   }, []);
 
   return (

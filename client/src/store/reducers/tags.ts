@@ -13,11 +13,12 @@ const actionTypes = {
 };
 
 const asyncBase = {
+  fetched: null,
   created: null,
   updated: null,
   deleted: null,
   error: null,
-  loading: null,
+  loading: false,
 };
 
 const initialState = { ...asyncBase, data: [] };
@@ -25,7 +26,7 @@ const initialState = { ...asyncBase, data: [] };
 const tagsReducerFactory = (namespace?: string) => (state = initialState, action) => {
   switch (action.type) {
     case injectNamespace(actionTypes.FETCH, namespace):
-      return { ...asyncBase, data: action.data.map((tag) => tag.id) };
+      return { ...asyncBase, data: action.data.map((tag) => tag.id), fetched: action.data };
     case injectNamespace(actionTypes.CREATE, namespace):
       return { ...asyncBase, data: [...state.data, action.data.id], created: action.data };
     case injectNamespace(actionTypes.UPDATE, namespace):
