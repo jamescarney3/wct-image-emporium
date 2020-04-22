@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
 import { TagBadge } from '~/components';
 
@@ -52,28 +52,13 @@ const ImageForm: React.FC<IImageForm> = ({ image, tags, onSubmit, loading }) => 
     }
   };
 
-  const onAddTag = (tag) => {
-    setTagIds([...tagIds, tag.id]);
+  const onAddTag = (tag, { action }) => {
+    if (action === 'create-option') {
+      setNewTags([...newTags, tag.label]);
+    } else {
+      setTagIds([...tagIds, tag.id]);
+    }
     setTagsInputValue('');
-  };
-
-  const submitTagsForm = (e) => {
-    e.preventDefault();
-
-    interface ITag {
-      id: string, label: string, value: string
-    }
-
-    const tagValue = processTagLabel(tagsInputValue);
-    const match: ITag = tags.find((tag) => tag.value === tagValue);
-
-    if (match && !tagIds.includes(match.id)) {
-      setTagIds([...tagIds, match.id]);
-      setTagsInputValue('');
-    } else if (!match && tagValue && !newTags.map(processTagLabel).includes(tagValue)) {
-      setNewTags([...newTags, tagsInputValue]);
-      setTagsInputValue('');
-    }
   };
 
   const onRemoveTagId = (id) => () => {
@@ -174,7 +159,7 @@ const ImageForm: React.FC<IImageForm> = ({ image, tags, onSubmit, loading }) => 
         <label htmlFor="tags">tags</label>
         <div className="form-row form-group">
           <div className="col">
-            <Select
+            <CreatableSelect
               options={tagOptions}
               onChange={onAddTag}
               value={tagsInputValue}

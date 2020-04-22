@@ -27,6 +27,15 @@ const App: React.SFC = () => {
           <Route path="/" component={Home} />
         </Switch>
       </SearchParamsProvider>
+      <footer className="pt-4 my-4 border-top container">
+        <div className="row">
+          <div className="col-12 col-md">
+            <h5>WCT arts & crafts guild</h5>
+            <p>marcus smart for lifetime DPOY</p>
+            <small className="d-block mb-3 text-muted">2020</small>
+          </div>
+        </div>
+      </footer>
     </Router>
   );
 };
