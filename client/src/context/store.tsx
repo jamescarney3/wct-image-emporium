@@ -3,6 +3,12 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import store, { actionCreators } from '~/store';
 
 
+interface ITag {
+  id: number,
+  value: string,
+  label: string,
+}
+
 const StoreContext = createContext({
   actionCreators,
   state: store.getState(),
@@ -46,7 +52,7 @@ const useAccessors = () => {
 
   return {
     imagesCollection: (imageIds) => {
-      return imageIds.map((id) => store.getState().records.images[id]);
+      return imageIds.map((id) => store.getState().records.images[id]).filter((el) => !!el);
     },
     imageDetail: (imageId) => {
       const image = store.getState().records.images[imageId];
@@ -59,6 +65,38 @@ const useAccessors = () => {
     },
     tagDetail: (id) => {
       return store.getState().records.tags[id] || null;
+    },
+    tagsCollection: (tagIds) => {
+      if (!tagIds) { return []; }
+      return tagIds.map((id) => store.getState().records.tags[id]).filter((el) => !!el);
+    },
+    tagsCollectionByValue: (values) => {
+      if (!values) { return []; }
+      return values.map((value) => (
+        Object.values(store.getState().records.tags).find((tag) => (
+          (tag as ITag).value === value
+        ))
+      )).filter((el) => !!el);
+    },
+    convertQString: (urlSearchParams) => {
+      const paramsHash = {};
+      urlSearchParams.forEach((v, k) => {
+        switch (k) {
+          case 'f[tags]':
+            const tags = store.getState().records.tags;
+            const tagIds = v.split(' ').map((value) => (
+              (Object.values(store.getState().records.tags).find(
+                (tag: { value: string }) => tag.value === value,
+              ) || {} as any).id
+            )).filter((id) => !!id);
+            paramsHash[k] = tagIds.join(' ');
+            break;
+          case 'f[user]':
+          default:
+            paramsHash[k] = v;
+        }
+      });
+      return paramsHash;
     },
   };
 };

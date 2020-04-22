@@ -17,7 +17,7 @@ const ImageDetail: React.FC<IImageDetail> = ({ image }) => {
       <TagBadge
         key={`image-detail-tag-${tag.id}`}
         label={tag.label}
-        to={`/tags/${tag.id}`}
+        to={`/images?f[tags]=${tag.value}`}
       />
     );
   };

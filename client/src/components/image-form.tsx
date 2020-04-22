@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import CreatableSelect from 'react-select/creatable';
 
-import { TagBadge, TagInputAutocomplete } from '~/components';
+import { TagBadge } from '~/components';
 
 
 interface IImageForm {
@@ -51,28 +52,13 @@ const ImageForm: React.FC<IImageForm> = ({ image, tags, onSubmit, loading }) => 
     }
   };
 
-  const onAutocompleteSelect = (id) => {
-    setTagIds([...tagIds, id]);
+  const onAddTag = (tag, { action }) => {
+    if (action === 'create-option') {
+      setNewTags([...newTags, tag.label]);
+    } else {
+      setTagIds([...tagIds, tag.id]);
+    }
     setTagsInputValue('');
-  };
-
-  const submitTagsForm = (e) => {
-    e.preventDefault();
-
-    interface ITag {
-      id: string, label: string, value: string
-    }
-
-    const tagValue = processTagLabel(tagsInputValue);
-    const match: ITag = tags.find((tag) => tag.value === tagValue);
-
-    if (match && !tagIds.includes(match.id)) {
-      setTagIds([...tagIds, match.id]);
-      setTagsInputValue('');
-    } else if (!match && tagValue && !newTags.map(processTagLabel).includes(tagValue)) {
-      setNewTags([...newTags, tagsInputValue]);
-      setTagsInputValue('');
-    }
   };
 
   const onRemoveTagId = (id) => () => {
@@ -84,6 +70,10 @@ const ImageForm: React.FC<IImageForm> = ({ image, tags, onSubmit, loading }) => 
     setNewTags(newTags.filter((existingLabel) => existingLabel !== label));
     setTagsInputValue('');
   };
+
+  const tagOptions = tags.filter((tag) => (
+    !tagIds.find((id) => id === tag.id)
+  ));
 
   const imageInput = (!image &&
     <div className="form-group">
@@ -143,7 +133,7 @@ const ImageForm: React.FC<IImageForm> = ({ image, tags, onSubmit, loading }) => 
   ));
 
   const tagBadges = (!!(tagIds.length || newTags.length) &&
-    <div className="mt-4">{tagIdBadges}{newTagBadges}</div>
+    <div className="form-group">{tagIdBadges}{newTagBadges}</div>
   );
 
   return (
@@ -166,31 +156,20 @@ const ImageForm: React.FC<IImageForm> = ({ image, tags, onSubmit, loading }) => 
         {imagePreview}
         {tagIdInputs}
         {newTagInputs}
-      </form>
-      <form onSubmit={submitTagsForm}>
         <label htmlFor="tags">tags</label>
         <div className="form-row form-group">
           <div className="col">
-            <input
-              type="text"
-              className="form-control"
-              name="tags"
-              onChange={(e) => { setTagsInputValue(e.target.value); }}
+            <CreatableSelect
+              options={tagOptions}
+              onChange={onAddTag}
               value={tagsInputValue}
-              disabled={loading}
-            />
-            <TagInputAutocomplete
-              tags={tags}
-              value={tagsInputValue}
-              onSelect={onAutocompleteSelect}
-              selectedIds={tagIds}
             />
           </div>
-          <button className="btn btn-primary" type="submit">add tag</button>
         </div>
         {tagBadges}
+        <button disabled type="submit" className="d-none" aria-hidden="true"></button>
+        <button disabled={loading} type="submit" form="image-upload" className="btn btn-primary">submit</button>
       </form>
-      <button disabled={loading} type="submit" form="image-upload" className="btn btn-primary">submit</button>
     </div>
   );
 };
