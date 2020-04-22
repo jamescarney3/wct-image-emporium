@@ -167,6 +167,7 @@ const ImageForm: React.FC<IImageForm> = ({ image, tags, onSubmit, loading }) => 
           </div>
         </div>
         {tagBadges}
+        <button disabled type="submit" className="d-none" aria-hidden="true"></button>
         <button disabled={loading} type="submit" form="image-upload" className="btn btn-primary">submit</button>
       </form>
     </div>
