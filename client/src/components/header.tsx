@@ -15,6 +15,11 @@ const Header: React.FC<IHeaderProps> = () => {
   const signInLink = (<a href="/auth/twitter">admin login</a>);
   const adminLink = (<Link to="/admin">admin tools</Link>);
 
+  const onSearch = (e) => {
+    e.preventDefault();
+    alert('search feature under construction; bug me on twitter to finish it');
+  };
+
   return (
     <nav className="container navbar navbar-expand-lg navbar-dark bg-dark">
       <button
@@ -30,12 +35,12 @@ const Header: React.FC<IHeaderProps> = () => {
       </button>
       <Link className="navbar-brand" to="/">WCT Image Emporium</Link>
       <div className="collapse navbar-collapse" id="navbarToggler">
-        <form className="flex-grow-1 my-3 mx-lg-5">
+        <form className="flex-grow-1 my-3 mx-lg-5" onSubmit={onSearch}>
           <label className="sr-only" htmlFor="inlineFormInputGroup">Search</label>
           <div className="input-group">
             <input type="text" className="form-control" id="inlineFormInputGroup" placeholder="Search" />
             <div className="input-group-append">
-              <div className="input-group-text">🔍</div>
+              <div className="input-group-text" onClick={onSearch}>🔍</div>
             </div>
           </div>
         </form>
