@@ -1,4 +1,4 @@
-json.array! @images do |image|
+json.data @images do |image|
   json.partial! 'api/images/image', image: image
 
   json.url image.asset.attached? ? rails_blob_url(image.asset) : nil
@@ -14,4 +14,8 @@ json.array! @images do |image|
     json.screen_name "@#{image.admin.screen_name}"
     json.url "http://twitter.com/#{image.admin.screen_name}"
   end
+end
+
+json.meta do
+  json.partial! 'api/images/collection_meta', meta: @meta
 end

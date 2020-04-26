@@ -19,22 +19,22 @@ const asyncBase = {
   loading: null,
 };
 
-const initialState = { data: [], ...asyncBase };
+const initialState = { data: [], meta: {}, ...asyncBase };
 
 const imagesReducerFactory = (namespace?: string) => (state = initialState, action): {} => {
   switch (action.type) {
     case injectNamespace(actionTypes.FETCH, namespace):
-      return { ...asyncBase, data: action.data.map((image) => image.id) };
+      return { ...state, ...asyncBase, data: action.data.map((image) => image.id), meta: action.meta };
     case injectNamespace(actionTypes.CREATE, namespace):
-      return { ...asyncBase, data: [...state.data, action.data.id], created: action.data };
+      return { ...state, ...asyncBase, data: [...state.data, action.data.id], created: action.data };
     case injectNamespace(actionTypes.UPDATE, namespace):
-      return { ...asyncBase, data: state.data, updated: action.data };
+      return { ...state, ...asyncBase, updated: action.data };
     case injectNamespace(actionTypes.DELETE, namespace):
-      return { ...asyncBase, data: state.data.filter((id) => id !== action.data.id), deleted: action.data };
+      return { ...state, ...asyncBase, data: state.data.filter((id) => id !== action.data.id), deleted: action.data };
     case injectNamespace(actionTypes.REQUEST, namespace):
-      return { ...asyncBase, data: state.data, loading: true };
+      return { ...state, ...asyncBase, loading: true };
     case injectNamespace(actionTypes.ERROR, namespace):
-      return { ...asyncBase, data: state.data, error: action.error };
+      return { ...state, ...asyncBase, error: action.error };
     case injectNamespace(actionTypes.CLEAN, namespace):
       return initialState;
     default:
@@ -100,15 +100,15 @@ const actionCreatorsFactory = (namespace?: string) => ({
     get(
       '/api/images',
       params,
-    ).then((data) => {
-      const { images, tags } = data.reduce((acc, image) => {
+    ).then((json) => {
+      const { images, tags } = json.data.reduce((acc, image) => {
         const { tags: tagRecords, ...rest } = image;
         const imageRecord = rest;
         return { images: [...acc.images, imageRecord], tags: [...acc.tags, ...tagRecords] };
       }, { images: [], tags: [] });
       dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
       dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'images', data: images });
-      dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data });
+      dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data: json.data, meta: json.meta });
     }).catch((err) => {
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
     });
@@ -117,15 +117,15 @@ const actionCreatorsFactory = (namespace?: string) => ({
     dispatch({ type: injectNamespace(actionTypes.REQUEST, namespace) });
     get(
       '/api/images/sample', params,
-    ).then((data) => {
-      const { images, tags } = data.reduce((acc, image) => {
+    ).then((json) => {
+      const { images, tags } = json.data.reduce((acc, image) => {
         const { tags: tagRecords, ...rest } = image;
         const imageRecord = rest;
         return { images: [...acc.images, imageRecord], tags: [...acc.tags, ...tagRecords] };
       }, { images: [], tags: [] });
       dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'tags', data: tags });
       dispatch({ type: recordsActionTypes.MERGE_RECORDS, recordType: 'images', data: images });
-      dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data });
+      dispatch({ type: injectNamespace(actionTypes.FETCH, namespace), data: json.data, meta: json.meta });
     }).catch((err) => {
       dispatch({ type: injectNamespace(actionTypes.ERROR, namespace), error: err });
     });

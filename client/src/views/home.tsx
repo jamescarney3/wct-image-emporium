@@ -15,8 +15,8 @@ const Home = () => {
   useEffect(() => {
     recentClear();
     randomClear();
-    index({ limit: 8 });
-    sample({ limit: 8 });
+    index(new URLSearchParams({ limit: '8' }));
+    sample(new URLSearchParams({ limit: '8' }));
     return () => {
       recentClear();
       randomClear();

@@ -31,10 +31,13 @@ const dataToClientParam = (v, k) => {
 };
 
 const initialState = {
-  dataParams: {},
+  dataParams: ({} as any),
   serverParams: null,
+  mergeServerParams: Function.prototype,
   setParam: Function.prototype,
+  setParams: Function.prototype,
   unsetParam: Function.prototype,
+  unsetParams: Function.prototype,
 };
 
 const SearchParamsContext = createContext(initialState);
@@ -101,6 +104,12 @@ const SearchParamsProvider = (props) => {
     routerHistory.push({ pathname, search: generateSearchString(newParams) });
   };
 
+  const setParams = (params) => {
+    const newParams = { ...dataParams, ...params };
+    setDataParams(newParams);
+    routerHistory.push({ pathname, search: generateSearchString(newParams) });
+  };
+
   const unsetParam = (k) => {
     const newParams = Object.keys(dataParams).reduce((newParams, key) => {
       return key === k ? newParams : { ...newParams, [key]: dataParams[key] };
@@ -109,7 +118,21 @@ const SearchParamsProvider = (props) => {
     routerHistory.push({ pathname, search: generateSearchString(newParams) });
   };
 
-  const value = { dataParams, serverParams, setParam, unsetParam };
+  const unsetParams = (keys) => {
+    const newParams = Object.keys(dataParams).reduce((newParams, key) => {
+      return keys.includes(key) ? newParams : { ...newParams, [key]: dataParams[key] };
+    }, {});
+    setDataParams(newParams);
+    routerHistory.push({ pathname, search: generateSearchString(newParams) });
+  };
+
+  const mergeServerParams = (params) => {
+    const mergedParams = new URLSearchParams(serverParams);
+    Object.entries(params).forEach(([k, v]: [string, string]) => { mergedParams.set(k, v); });
+    return mergedParams;
+  };
+
+  const value = { dataParams, serverParams, mergeServerParams, setParam, setParams, unsetParam, unsetParams };
 
   return (
     <SearchParamsContext.Provider value={value}>

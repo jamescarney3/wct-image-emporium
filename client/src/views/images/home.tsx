@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import SearchParamsContext from '~/context/search-params';
 import { useStore, useAccessors } from '~/context/store';
-import { ImagePage, TagFilter } from '~/components';
+import { ImagePage, Paginator, TagFilter } from '~/components';
 
 
 const ImagesHome = () => {
@@ -27,10 +27,16 @@ const ImagesHome = () => {
   useEffect(() => {
     if (!search) {
       index();
-    } else if (serverParams && !images.loading && !images.data.length) {
+    } else if (serverParams && !images.loading) {
       index(serverParams);
     }
-  }, [search, serverParams]);
+  }, [serverParams]);
+
+  const paginatorProps = {
+    offset: parseInt(dataParams.offset, 10) || 0,
+    limit: parseInt(dataParams.limit, 10) || 2,
+    count: images.meta.count || 0,
+  };
 
   const handleAddTag = (tag) => {
     const paramTags = dataParams['f[tags]'] || [];
@@ -54,6 +60,7 @@ const ImagesHome = () => {
         <div className="row">
           <ImagePage images={imagesCollection(images.data)} />
         </div>
+        {images.meta.count > images.meta.limit && <Paginator {...paginatorProps} />}
         <h3>filter by tag:</h3>
         <TagFilter
           tags={tagsCollection(allTags.data)}

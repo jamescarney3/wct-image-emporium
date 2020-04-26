@@ -3,8 +3,11 @@ class Api::ImagesController < ApplicationController
   before_action :require_logged_in, only: [:create, :update, :destroy]
   before_action :ensure_owner, only: [:update, :destroy]
 
+  DEFAULT_LIMIT = 12
+
   def index
     @images = Image.all
+    @meta = {}
     if params[:f]
       @images = @images.with_tags(*params[:f][:tags].split.map(&:to_i)) if params[:f][:tags]
       if params[:f][:before] || params[:f][:after]
@@ -15,7 +18,13 @@ class Api::ImagesController < ApplicationController
       @images = @images.for_user(params[:f][:user]) if params[:f][:user]
     end
     @images = @images.for_user(current_user.id) if params[:admin]
-    @images = @images.limit(params[:limit]) if params[:limit]
+
+    @meta[:count] = @images.count
+    @meta[:limit] = DEFAULT_LIMIT
+    @meta[:offset] = params[:offset] ? params[:offset].to_i : 0
+
+    @images = @images.limit(DEFAULT_LIMIT)
+    @images = @images.offset(params[:offset]) if params[:offset]
     render :index, status: 200
   end
 
@@ -92,6 +101,7 @@ class Api::ImagesController < ApplicationController
 
   def sample
     @images = Image.all
+    @meta = {}
     if params[:f]
       @images = @images.with_tags(*params[:f][:tags].split.map(&:to_i)) if params[:f][:tags]
       if params[:f][:before] || params[:f][:after]
@@ -101,8 +111,13 @@ class Api::ImagesController < ApplicationController
       end
       @images = @images.for_user(params[:f][:user]) if params[:f][:user]
     end
+
+    @meta[:count] = @images.count
+    @meta[:limit] = DEFAULT_LIMIT
+    @meta[:offset] = params[:offset] ? params[:offset].to_i : 0
+
     @images = @images.shuffle
-    @images = @images.limit(params[:limit]) if params[:limit]
+    @images = @images.take(DEFAULT_LIMIT)
 
     if !@images.nil?
       render :index, status: 200
