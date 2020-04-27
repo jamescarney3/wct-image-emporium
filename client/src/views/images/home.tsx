@@ -35,7 +35,7 @@ const ImagesHome = () => {
   const paginatorProps = {
     offset: parseInt(dataParams.offset, 10) || 0,
     limit: parseInt(dataParams.limit, 10) || 2,
-    count: images.meta.count || 0,
+    count: images.meta ? images.meta.count : 0,
   };
 
   const handleAddTag = (tag) => {
