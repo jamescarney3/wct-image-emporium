@@ -25,6 +25,7 @@ class Api::ImagesController < ApplicationController
 
     @images = @images.limit(DEFAULT_LIMIT)
     @images = @images.offset(params[:offset]) if params[:offset]
+    @images = @images.reverse
     render :index, status: 200
   end
 
