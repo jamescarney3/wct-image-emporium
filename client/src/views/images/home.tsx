@@ -52,6 +52,10 @@ const ImagesHome = () => {
     }
   };
 
+  const paginator = (images.meta && (images.meta.count > images.meta.limit) &&
+    <Paginator {...paginatorProps} />
+  );
+
   const renderContent = () => {
     if (images.loading || allTags.loading) { return (<div>loading...</div>); }
     if (images.error || allTags.error) { return (<div>error loading page data!</div>); }
@@ -60,7 +64,7 @@ const ImagesHome = () => {
         <div className="row">
           <ImagePage images={imagesCollection(images.data)} />
         </div>
-        {images.meta.count > images.meta.limit && <Paginator {...paginatorProps} />}
+        {paginator}
         <h3>filter by tag:</h3>
         <TagFilter
           tags={tagsCollection(allTags.data)}

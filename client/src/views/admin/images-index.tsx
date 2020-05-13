@@ -31,12 +31,16 @@ const ImagesIndex = () => {
     count: adminImages.meta.count || 0,
   };
 
+  const paginator = (adminImages.meta && (adminImages.meta.count > adminImages.meta.limit) &&
+    <Paginator {...paginatorProps} />
+  );
+
   if (adminImages.loading) { return (<div>loading...</div>); }
 
   return (
     <div className="container mt-3">
       <ImagePage images={imagesCollection(adminImages.data)} admin />
-      {adminImages.meta.count > adminImages.meta.limit && <Paginator {...paginatorProps} />}
+      {paginator}
     </div>
   );
 };
