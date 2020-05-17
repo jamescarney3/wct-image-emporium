@@ -17,13 +17,13 @@ def get_admins_heroku
 end
 
 def set_admins_heroku(admins)
-  admins_b64 = Base64.encode64 YAML.dump(admins).chomp
+  admins_b64 = Base64.strict_encode64 YAML.dump(admins).chomp
   %x"heroku config:set ADMINS_B64=#{admins_b64}\n"
 end
 
 def set_admins_env(admins)
   env = File.open(ENV_URL).read
-  admins_b64 = Base64.encode64 YAML.dump(admins)
+  admins_b64 = Base64.strict_encode64 YAML.dump(admins)
   File.write ENV_URL, env.sub(/ADMINS_B64=(.+?)\n/, "ADMINS_B64=#{admins_b64}\n")
 end
 
