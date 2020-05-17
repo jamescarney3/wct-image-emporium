@@ -27,7 +27,7 @@ const ImagesIndex = () => {
 
   const paginatorProps = {
     offset: parseInt(dataParams.offset, 10) || 0,
-    limit: parseInt(dataParams.limit, 10) || 2,
+    limit: parseInt(dataParams.limit, 10) || 12,
     count: adminImages.meta.count || 0,
   };
 
