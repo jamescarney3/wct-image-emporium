@@ -1,8 +1,8 @@
-// stylelint-disable
 $quadrant-side: 20px;
 $quadrant-border-radius: $quadrant-side / 2;
-$dot-gutter: 10px;
-$spin-duration: 1s;
+$dot-gutter: 2px;
+$spin-duration: 0.75s;
+$pulse-scale: 0.75;
 
 // generate selectors for the first 4 instances of parent selector
 $sibling-selectors: ('&', '& ~ &', '& ~ & ~ &', '& ~ & ~ & ~ &');
@@ -13,29 +13,39 @@ $dot-colors:(
   $team-primary-light-4,
 );
 
-@keyframes revolve {
-  from {
-    top: 0;
-    left: 0;
-  }
-  25% {
-    top: 0;
-    left: ($quadrant-side + $dot-gutter);
-  }
+$dot-configs: (
+  (
+    color: $team-primary-light-1,
+    top: 0,
+    left: 0,
+    transform-origin: $quadrant-side + $dot-gutter $quadrant-side + $dot-gutter,
+  ), (
+    color: $team-primary-light-2,
+    top: $quadrant-side + $dot-gutter * 2,
+    left: 0,
+    transform-origin: $quadrant-side + $dot-gutter 0 - $dot-gutter,
+  ), (
+    color: $team-primary-light-3,
+    top: $quadrant-side + $dot-gutter * 2,
+    left: $quadrant-side + $dot-gutter * 2,
+    transform-origin: 0 - $dot-gutter 0 - $dot-gutter,
+  ), (
+    color: $team-primary-light-4,
+    top: 0,
+    left: $quadrant-side + $dot-gutter * 2,
+    transform-origin: 0 - $dot-gutter $quadrant-side + $dot-gutter,
+  ),
+);
+
+@keyframes pulse-and-spin {
   50% {
-    top: ($quadrant-side + $dot-gutter);
-    left: ($quadrant-side + $dot-gutter);
+    transform: scale($pulse-scale) rotate(180deg);
   }
-  75% {
-    top: ($quadrant-side + $dot-gutter);
-    left: 0;
-  }
+
   to {
-    top: 0;
-    left: 0;
+    transform: rotate(360deg);
   }
 }
-
 
 .loading-spinner {
   height: $quadrant-side * 2 + $dot-gutter;
@@ -49,8 +59,11 @@ $dot-colors:(
 
     @for $i from 1 through 4 {
       #{nth($sibling-selectors, $i)} {
-        background-color: nth($dot-colors, $i);
-        animation: revolve $spin-duration ($spin-duration / 4 * $i) infinite linear;
+        background-color: map-get(nth($dot-configs, $i), 'color');
+        top: map-get(nth($dot-configs, $i), 'top');
+        left: map-get(nth($dot-configs, $i), 'left');
+        animation: pulse-and-spin $spin-duration infinite linear;
+        transform-origin: map-get(nth($dot-configs, $i), 'transform-origin');
       }
     }
   }

@@ -46,8 +46,8 @@ const ImageDetail: React.FC<IImageDetail> = ({ image }) => {
       <img
         alt={image.title}
         className={imgClass}
-        onError={(e): void => setError(true)}
-        onLoad={(e): void => setLoaded(true)}
+        // onError={(e): void => setError(true)}
+        // onLoad={(e): void => setLoaded(true)}
         src={image.url}
       />
       <div className={placeholderClass}>
