@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useStore, useAccessors } from '~/context/store';
-import { ImagePage } from '~/components';
+import { ImagePage, LoadingSpinner } from '~/components';
 
 const ImagesIndex = () => {
   const [adminImages, { index, clear }] = useStore('adminImages');
@@ -13,7 +13,7 @@ const ImagesIndex = () => {
     return clear;
   }, []);
 
-  if (adminImages.loading) { return (<div>loading...</div>); }
+  if (adminImages.loading) { return (<LoadingSpinner className="mx-auto my-5" />); }
 
   return (
     <div className="container mt-3">

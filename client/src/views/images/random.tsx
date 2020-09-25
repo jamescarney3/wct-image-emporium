@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useStore, useAccessors } from '~/context/store';
-import { ImageDetail } from '~/components';
+import { ImageDetail, LoadingSpinner } from '~/components';
 
 const Random = () => {
   const [images, imagesActionCreators] = useStore('images');
@@ -18,7 +18,7 @@ const Random = () => {
   const image = imageDetail(images.data[0]);
 
   const renderContent = () => {
-    if (images.loading) { return (<div>loading...</div>); }
+    if (images.loading) { return (<LoadingSpinner className="mx-auto my-5" />); }
     if (images.error) { return (<div>error fetching page data!</div>); }
     return (image && <ImageDetail image={image} />);
   };

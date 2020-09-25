@@ -1,1 +1,55 @@
 $red: #ff3300;
+
+$tint-modifiers: (
+  10%,
+  20%,
+  30%,
+  40%,
+);
+
+/* ----- THEME COLORS ----- */
+$team-primary: #007a33; // celtics green
+$team-secondary: #ffffff; // white
+$team-tertiary: #000000; // black
+$team-highlight: #ba9653; // celtics gold
+$team-accent: #a7a9ac; // celtics grey
+
+// light variations
+// $team-primary-light-1: scale-color($team-primary, $lightness: 10%);
+$team-primary-light-1: scale-color($team-primary, $lightness: nth($tint-modifiers, 1));
+$team-primary-light-2: scale-color($team-primary, $lightness: nth($tint-modifiers, 2));
+$team-primary-light-3: scale-color($team-primary, $lightness: nth($tint-modifiers, 3));
+$team-primary-light-4: scale-color($team-primary, $lightness: nth($tint-modifiers, 4));
+$team-secondary-light-1: scale-color($team-secondary, $lightness: nth($tint-modifiers, 1));
+$team-secondary-light-2: scale-color($team-secondary, $lightness: nth($tint-modifiers, 2));
+$team-secondary-light-3: scale-color($team-secondary, $lightness: nth($tint-modifiers, 3));
+$team-secondary-light-4: scale-color($team-secondary, $lightness: nth($tint-modifiers, 4));
+$team-tertiary-light-1: scale-color($team-tertiary, $lightness: nth($tint-modifiers, 1));
+$team-tertiary-light-2: scale-color($team-tertiary, $lightness: nth($tint-modifiers, 2));
+$team-tertiary-light-3: scale-color($team-tertiary, $lightness: nth($tint-modifiers, 3));
+$team-tertiary-light-4: scale-color($team-tertiary, $lightness: nth($tint-modifiers, 4));
+$team-highlight-light-1: scale-color($team-highlight, $lightness: nth($tint-modifiers, 1));
+$team-highlight-light-2: scale-color($team-highlight, $lightness: nth($tint-modifiers, 2));
+$team-highlight-light-3: scale-color($team-highlight, $lightness: nth($tint-modifiers, 3));
+$team-highlight-light-4: scale-color($team-highlight, $lightness: nth($tint-modifiers, 4));
+$team-accent-light-1: scale-color($team-accent, $lightness: nth($tint-modifiers, 1));
+$team-accent-light-2: scale-color($team-accent, $lightness: nth($tint-modifiers, 2));
+$team-accent-light-3: scale-color($team-accent, $lightness: nth($tint-modifiers, 3));
+$team-accent-light-4: scale-color($team-accent, $lightness: nth($tint-modifiers, 4));
+
+// dark variations
+
+$theme-colors: (
+  team-primary: $team-primary,
+  team-secondary: $team-secondary,
+  team-tertiary: $team-tertiary,
+  team-highlight: $team-highlight,
+  team-accent: $team-accent,
+);
+
+// @each $theme-color-name, $theme-color-value in $theme-colors {
+//   @each $tint-modifier-name, $tint-modifier-value in $tint-modifiers {
+//     $#{$theme-color-name}-light-#{$tint-modifier-name}: scale-color($theme-color-value, $lightness: $tint-modifier-value);
+//     $#{$theme-color-name}-dark-#{$tint-modifier-name}: scale-color($theme-color-value, $darkness: $tint-modifier-value);
+//   }
+// }

@@ -1,0 +1,57 @@
+// stylelint-disable
+$quadrant-side: 20px;
+$quadrant-border-radius: $quadrant-side / 2;
+$dot-gutter: 10px;
+$spin-duration: 1s;
+
+// generate selectors for the first 4 instances of parent selector
+$sibling-selectors: ('&', '& ~ &', '& ~ & ~ &', '& ~ & ~ & ~ &');
+$dot-colors:(
+  $team-primary-light-1,
+  $team-primary-light-2,
+  $team-primary-light-3,
+  $team-primary-light-4,
+);
+
+@keyframes revolve {
+  from {
+    top: 0;
+    left: 0;
+  }
+  25% {
+    top: 0;
+    left: ($quadrant-side + $dot-gutter);
+  }
+  50% {
+    top: ($quadrant-side + $dot-gutter);
+    left: ($quadrant-side + $dot-gutter);
+  }
+  75% {
+    top: ($quadrant-side + $dot-gutter);
+    left: 0;
+  }
+  to {
+    top: 0;
+    left: 0;
+  }
+}
+
+
+.loading-spinner {
+  height: $quadrant-side * 2 + $dot-gutter;
+  width: $quadrant-side * 2 + $dot-gutter;
+
+  &__quadrant {
+    height: $quadrant-side;
+    width: $quadrant-side;
+    border-radius: $quadrant-border-radius;
+    position: absolute;
+
+    @for $i from 1 through 4 {
+      #{nth($sibling-selectors, $i)} {
+        background-color: nth($dot-colors, $i);
+        animation: revolve $spin-duration ($spin-duration / 4 * $i) infinite linear;
+      }
+    }
+  }
+}
