@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, RouteProps, Redirect } from 'react-router';
 
+import { LoadingSpinner } from '~/components';
 import { useStore } from '~/context/store';
 
 
@@ -17,7 +18,7 @@ const AuthRoute: React.SFC<IAuthRoute> = ({ redirectTo, ...rest }) => {
   }
 
   if (user.pending) {
-    return (<div>loading...</div>);
+    return (<LoadingSpinner className="mx-auto my-5" />);
   }
 
   return (

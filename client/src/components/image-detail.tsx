@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import classNames from 'classnames';
 
-import { TagBadge } from '~/components';
+import { TagBadge, LoadingSpinner } from '~/components';
 
 
 interface IImageDetail {
@@ -12,6 +13,9 @@ interface IImageDetail {
 }
 
 const ImageDetail: React.FC<IImageDetail> = ({ image }) => {
+  const [loaded, setLoaded]: [boolean, (v: any) => void] = useState(false);
+  const [error, setError]: [boolean, (v: any) => void] = useState(false);
+
   const renderTag = (tag) => {
     return (
       <TagBadge
@@ -22,9 +26,34 @@ const ImageDetail: React.FC<IImageDetail> = ({ image }) => {
     );
   };
 
+  const imgClass: string = classNames([
+    'w-100',
+    !loaded && 'd-none',
+  ]);
+  const placeholderClass: string = classNames([
+    'image-detail__placeholder',
+    'w-100 bg-light',
+    loaded ? 'd-none' : 'd-flex flex-column justify-content-around',
+  ]);
+  const errorMessageClass: string = classNames([
+    'image-detail__error-message',
+    'text-center',
+    !error && 'd-none',
+  ]);
+
   return (
     <div className="image-detail my-3">
-      <img className="w-100" src={image.url} alt={image.title} />
+      <img
+        alt={image.title}
+        className={imgClass}
+        // onError={(e): void => setError(true)}
+        // onLoad={(e): void => setLoaded(true)}
+        src={image.url}
+      />
+      <div className={placeholderClass}>
+        <div className={errorMessageClass}>☠️ image failed to load - this... is... bogus!</div>
+        {!loaded && !error && <LoadingSpinner className="m-auto" />}
+      </div>
       <h3 className="iamge-detail__title">{image.title}</h3>
       {image.tags.map(renderTag)}
     </div>

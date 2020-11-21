@@ -4,5 +4,6 @@ export { default as ImageDetail } from './image-detail';
 export { default as ImagePage } from './image-page';
 export { default as ImagePanel } from './image-panel';
 export { default as ImageForm } from './image-form';
+export { default as LoadingSpinner } from './loading-spinner';
 export { default as TagBadge } from './tag-badge';
 export { default as TagFilter } from './tag-filter';

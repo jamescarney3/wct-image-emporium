@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import SearchParamsContext from '~/context/search-params';
 import { useStore, useAccessors } from '~/context/store';
-import { ImagePage, TagFilter } from '~/components';
+import { ImagePage, LoadingSpinner, TagFilter } from '~/components';
 
 
 const ImagesHome = () => {
@@ -47,7 +47,7 @@ const ImagesHome = () => {
   };
 
   const renderContent = () => {
-    if (images.loading || allTags.loading) { return (<div>loading...</div>); }
+    if (images.loading || allTags.loading) { return (<LoadingSpinner className="mx-auto my-5" />); }
     if (images.error || allTags.error) { return (<div>error loading page data!</div>); }
     return (
       <div>
